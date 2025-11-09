@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- === Mobile & Add-to-Homescreen Meta Tags === -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="The System">
+    <meta name="application-name" content="The System">
+    <!-- === End Meta Tags === -->
+
+    <!-- === NEW: App Icon === -->
+    <!-- A custom, self-contained SVG icon (a glowing blue crystal) -->
+    <!-- Favicon for browsers -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%235C9FFF;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%233282F6;stop-opacity:1' /%3E%3C/linearGradient%3E%3Cfilter id='svgGlow' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='4' result='blur' /%3E%3CfeMerge%3E%3CfeMergeNode in='blur' /%3E%3CfeMergeNode in='SourceGraphic' /%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M50 5 L70 35 L50 95 L30 35 Z' fill='url(%23grad)' filter='url(%23svgGlow)' stroke='%23aabbee' stroke-width='2'/%3E%3C/svg%3E" type="image/svg+xml">
+    <!-- Apple Touch Icon for iOS Home Screen -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%235C9FFF;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%233282F6;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M50 5 L70 35 L50 95 L30 35 Z' fill='url(%23grad)' stroke='%23aabbee' stroke-width='2'/%3E%3C/svg%3E">
+    <!-- === End App Icon === -->
+
+    <title>The System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #E0E0E0;
+            overflow: hidden; /* Prevent scrolling on desktop */
+        }
+        
+        html, body {
+            height: 100%;
+        }
+
+        /* Custom font for digital/system elements */
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Main container with glow */
+        .system-container {
+            background-color: rgba(10, 10, 15, 0.85);
+            border: 1px solid #2a406b;
+            box-shadow: 0 0 25px rgba(50, 100, 255, 0.4), inset 0 0 15px rgba(50, 100, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* Mobile: full height stack. Desktop: fixed side-by-side */
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column; /* Mobile-first: stack panels */
+        }
+        
+        @media (min-width: 768px) { /* md breakpoint */
+            .system-container {
+                flex-direction: row; /* Desktop: side-by-side */
+            }
+        }
+        
+        /* Glass panel effect */
+        .glass-panel {
+            background: rgba(20, 20, 30, 0.5);
+            border: 1px solid #2a406b;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        /* Left panel styling */
+        .left-panel {
+            /* Mobile: Top bar */
+            width: 100%;
+            height: auto; /* Auto height on mobile */
+            border-bottom: 1px solid #2a406b;
+            border-right: 0;
+            overflow-y: visible; /* Allow content to flow */
+            
+            /* Desktop: Side bar */
+            @media (min-width: 768px) {
+                width: 320px;
+                height: 100%;
+                border-right: 1px solid #2a406b;
+                border-bottom: 0;
+                overflow-y: auto;
+                flex-shrink: 0; /* Prevent shrinking */
+            }
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* Right panel styling */
+        .right-panel {
+            flex: 1; /* Take remaining space */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Important for internal scrolling */
+            width: 100%;
+        }
+
+        /* Header styling */
+        .system-header {
+            padding: 20px;
+            border-bottom: 1px solid #2a406b;
+            position: relative; /* Added for countdown positioning */
+        }
+
+        .system-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #FFFFFF;
+            font-size: 1.75rem; /* Smaller for mobile */
+            @media (min-width: 768px) {
+                font-size: 2.5rem; /* Larger on desktop */
+            }
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #3282F6, 0 0 20px #3282F6;
+        }
+        
+        .system-subtitle {
+            color: #88AADD;
+            font-size: 0.875rem;
+             @media (min-width: 768px) {
+                font-size: 1rem;
+            }
+            margin-top: 4px;
+        }
+        
+        .countdown {
+            text-align: right;
+        }
+        .countdown-timer {
+            font-size: 1.25rem; /* Smaller for mobile */
+            @media (min-width: 768px) {
+                 font-size: 2rem;
+            }
+        }
+        .countdown-label {
+            font-size: 0.75rem;
+            @media (min-width: 768px) {
+                 font-size: 0.875rem;
+            }
+        }
+
+        /* Main content area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto; /* This is the main scrolling area */
+        }
+
+        /* Stats section */
+        .stat-bar {
+            background-color: #1a1a2a;
+            border: 1px solid #2a406b;
+            height: 28px;
+            overflow: hidden;
+        }
+        .stat-bar-inner {
+            background: linear-gradient(90deg, #3282F6, #5C9FFF);
+            height: 100%;
+            transition: width 0.5s ease-out;
+            box-shadow: 0 0 10px #3282F6;
+        }
+        
+        /* Stat title */
+        .stat-title {
+            display: flex;
+            align-items: center;
+        }
+        .stat-info-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            color: #88AADD;
+            border: 1px solid #88AADD;
+            border-radius: 50%;
+            width: 1.1rem;
+            height: 1.1rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 8px;
+            cursor: pointer;
+            line-height: 1;
+            padding-bottom: 1px;
+        }
+        .stat-info-btn:hover {
+            background: #88AADD;
+            color: #0A0A0F;
+        }
+        
+        /* Stat point allocation button */
+        .btn-add-stat {
+            font-family: 'Orbitron', sans-serif;
+            background: #1a2a1a;
+            border: 1px solid #3a7b4a;
+            color: #88AA88;
+            border-radius: 50%;
+            width: 1.5rem;
+            height: 1.5rem;
+            line-height: 1;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .btn-add-stat:hover {
+            background: #2a4a2a;
+            color: #AAEFAA;
+            box-shadow: 0 0 10px #3a7b4a;
+        }
+
+        /* Quest list item */
+        .quest-item {
+            background: rgba(30, 40, 70, 0.3);
+            border: 1px solid #2a406b;
+            transition: all 0.3s ease;
+        }
+        .quest-item:hover {
+            background: rgba(40, 50, 90, 0.5);
+            box-shadow: 0 0 15px rgba(50, 100, 255, 0.3);
+        }
+        .quest-item.completed {
+            background: rgba(30, 70, 40, 0.5);
+            border-color: #3a7b4a;
+            color: #88AA88;
+        }
+        .quest-item.completed .quest-title { /* Strikethrough title only */
+             text-decoration: line-through;
+        }
+        .quest-tip {
+            font-style: italic;
+            color: #a3b8e0;
+            font-size: 0.9em;
+            padding-left: 1rem;
+            border-left: 2px solid #3a5a9a;
+            margin-top: 0.5rem;
+        }
+
+        /* Buttons */
+        .btn-system {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(145deg, #2a406b, #1e2d4d);
+            border: 1px solid #3a5a9a;
+            color: #E0E0E0;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-system:hover {
+            background: linear-gradient(145deg, #3a5a9a, #2a406b);
+            color: #FFFFFF;
+            box-shadow: 0 0 15px #3282F6;
+        }
+        .btn-system:disabled {
+            background: #1a1a2a;
+            color: #555;
+            border-color: #2a406b;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Quest complete/undo buttons */
+        .btn-quest {
+            font-size: 0.875rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0; /* Prevent button from shrinking */
+        }
+        
+        .btn-complete {
+            background: #1a2a1a;
+            border: 1px solid #3a7b4a;
+            color: #88AA88;
+        }
+        .btn-complete:hover {
+            background: #2a4a2a;
+            color: #AAEFAA;
+            box-shadow: 0 0 10px #3a7b4a;
+        }
+        
+        .btn-undo {
+            background: #2a1a1a;
+            border: 1px solid #7b3a3a;
+            color: #AA8888;
+        }
+        .btn-undo:hover {
+            background: #4a2a2a;
+            color: #FFAAAA;
+            box-shadow: 0 0 10px #7b3a3a;
+        }
+
+        /* Terminal styling */
+        .terminal {
+            background-color: #0A0A0F;
+            border-top: 1px solid #2a406b;
+            height: 200px;
+            padding: 15px;
+            overflow-y: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            display: none; /* Hides the terminal from view */
+        }
+        .terminal-line {
+            line-height: 1.6;
+        }
+        .terminal-line.log {
+            color: #E0E0E0;
+        }
+        .terminal-line.error {
+            color: #FF6B6B;
+        }
+        .terminal-line.success {
+            color: #6BFF6B;
+        }
+        .terminal-line.warn {
+            color: #FFD96B;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0F;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a406b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a5a9a;
+        }
+
+        /* Input fields */
+        .input-system {
+            background-color: #0A0A0F;
+            border: 1px solid #2a406b;
+            color: #E0E0E0;
+            padding: 10px;
+            -webkit-appearance: none; /* Fix for iOS input zoom */
+        }
+        .input-system:focus {
+            outline: none;
+            border-color: #3282F6;
+            box-shadow: 0 0 10px #3282F6;
+        }
+        
+        /* Modal for Stat Description */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-box {
+            background: #0A0A0F;
+            border: 1px solid #3a5a9a;
+            box-shadow: 0 0 25px rgba(50, 100, 255, 0.4);
+            border-radius: 8px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 1001;
+        }
+
+        /* Rank Colors */
+        .rank-e { color: #94a3b8; } /* slate-400 */
+        .rank-d { color: #22c55e; } /* green-500 */
+        .rank-c { color: #3b82f6; } /* blue-500 */
+        .rank-b { color: #a855f7; } /* purple-500 */
+        .rank-a { color: #f97316; } /* orange-500 */
+        .rank-s { color: #ef4444; text-shadow: 0 0 8px #ef4444; } /* red-500 */
+
+    </style>
+</head>
+<body class="h-screen w-screen">
+
+    <div class="system-container">
+        <!-- LEFT PANEL: USER INFO & CONTROLS -->
+        <aside class="left-panel space-y-6">
+            <header class="text-center">
+                <h2 class="text-2xl font-orbitron text-white">HUNTER PROFILE</h2>
+                <div id="hunter-rank-display" class="my-2">
+                    <h3 id="hunter-rank" class="text-3xl font-orbitron rank-e">E-RANK</h3>
+                    <p id="hunter-level-text" class="text-lg text-white">LVL. 1</p>
+                    <p id="hunter-exp-text" class="text-xs text-blue-300">0 / 150 EXP</p>
+                </div>
+                <!-- Stat Points Display -->
+                <div id="stat-points-container" class="hidden my-2">
+                    <span class="text-xl font-orbitron text-green-400">STAT POINTS:</span>
+                    <span id="stat-points-value" class="text-xl font-orbitron text-green-400">0</span>
+                </div>
+                <p id="user-id-display" class="text-xs text-blue-300 break-all">ID: [CONNECTING...]</p>
+            </header>
+
+            <!-- CONTROLS SECTION -->
+            <div class="space-y-4">
+                <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1">SYSTEM CONTROLS</h3>
+                
+                <div>
+                    <label for="api-key" class="text-sm font-semibold text-blue-200">GEMINI API KEY</label>
+                    <input type="password" id="api-key" class="input-system w-full rounded mt-1" placeholder="Paste your API key...">
+                </div>
+                
+                <div>
+                    <label for="location" class="text-sm font-semibold text-blue-200">CURRENT LOCATION</label>
+                    <input type="text" id="location" class="input-system w-full rounded mt-1" value="Rockledge, Florida">
+                </div>
+
+                <div>
+                    <label for="field-notes" class="text-sm font-semibold text-blue-200">FIELD NOTES (Optional)</label>
+                    <textarea id="field-notes" rows="3" class="input-system w-full rounded mt-1" placeholder="e.g., 'Slept 5 hours', 'Garmin 5k time: 21:50', 'All-day event tomorrow', 'Lots of school work'"></textarea>
+                </div>
+                
+                <button id="request-quests-btn" class="btn-system w-full rounded">
+                    REQUEST NEW QUESTS
+                </button>
+            </div>
+
+            <!-- STATS SECTION -->
+            <div class="space-y-4 flex-1">
+                <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1">STATS</h3>
+                
+                <!-- STRENGTH -->
+                <div class="stat">
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="stat-title text-lg font-semibold text-white">
+                            STRENGTH
+                            <span class="stat-info-btn" data-stat="strength" data-desc="Your physical power, endurance, and health. Governs your 'Elite Fighter' physique and resilience.">?</span>
+                        </span>
+                        <div class="flex items-center space-x-2">
+                            <button id="add-strength" class="btn-add-stat hidden" data-stat="strength">+</button>
+                            <span id="strength-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar rounded-full">
+                        <div id="strength-exp" class="stat-bar-inner" style="width: 0%;"></div>
+                    </div>
+                    <span id="strength-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
+                </div>
+
+                <!-- INTELLIGENCE -->
+                <div class="stat">
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="stat-title text-lg font-semibold text-white">
+                            INTELLIGENCE
+                            <span class="stat-info-btn" data-stat="intelligence" data-desc="Your mental competence, technical skill, and fortitude. Governs your academic, 'Tony Stark' goals, and self-control.">?</span>
+                        </span>
+                         <div class="flex items-center space-x-2">
+                            <button id="add-intelligence" class="btn-add-stat hidden" data-stat="intelligence">+</button>
+                            <span id="intelligence-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar rounded-full">
+                        <div id="intelligence-exp" class="stat-bar-inner" style="width: 0%;"></div>
+                    </div>
+                    <span id="intelligence-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
+                </div>
+
+                <!-- PRESENCE -->
+                <div class="stat">
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="stat-title text-lg font-semibold text-white">
+                            PRESENCE
+                            <span class="stat-info-btn" data-stat="presence" data-desc="Your social mastery, charm, and influence. Governs your ability to lead, persuade, and interact with others.">?</span>
+                        </span>
+                         <div class="flex items-center space-x-2">
+                            <button id="add-presence" class="btn-add-stat hidden" data-stat="presence">+</button>
+                            <span id="presence-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
+                        </div>
+                    </div>
+                    <div class="stat-bar rounded-full">
+                        <div id="presence-exp" class="stat-bar-inner" style="width: 0%;"></div>
+                    </div>
+                    <span id="presence-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT PANEL: QUESTS & TERMINAL -->
+        <main class="right-panel">
+            <header class="system-header glass-panel">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h1 class="system-title">THE SYSTEM</h1>
+                        <p class="system-subtitle">Conquer the Fear of Stagnation. Level up every day.</p>
+                    </div>
+                    <div class="countdown">
+                        <h3 class="font-orbitron text-red-400 countdown-timer" id="countdown-timer">00:00:00</h3>
+                        <p class="text-xs text-red-300 countdown-label">TIME REMAINING</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- QUEST LIST -->
+            <div class="main-content space-y-4" id="main-content-area">
+                <h2 class="text-2xl font-orbitron text-white">DAILY QUESTS</h2>
+                <div id="alert-box" class="hidden p-4 rounded-lg glass-panel border-l-4 border-yellow-400">
+                    <h3 id="alert-title" class="font-bold text-yellow-200">SYSTEM ALERT</h3>
+                    <p id="alert-text" class="text-yellow-100"></p>
+                </div>
+                <div id="quest-list" class="space-y-3">
+                    <!-- Quests will be dynamically inserted here -->
+                    <p class="text-gray-400">Requesting new directives from the Architect...</p>
+                </div>
+            </div>
+
+            <!-- TERMINAL -->
+            <div id="terminal" class="terminal glass-panel">
+                <div class="terminal-line log">SYSTEM BOOTING...</div>
+                <div class="terminal-line log">Connecting to Firebase...</div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- STAT INFO MODAL -->
+    <div id="stat-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3 id="modal-stat-title" class="text-2xl font-orbitron text-white mb-3">STAT INFO</h3>
+            <p id="modal-stat-desc" class="text-lg text-gray-300 mb-6">Description goes here.</p>
+            <button id="modal-close-btn" class="btn-system w-full rounded">CLOSE</button>
+        </div>
+    </div>
+
+
+    <!-- Firebase and App Logic -->
+    <script type="module">
+        // Firebase Imports
+        import { initializeApp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInAnonymously, 
+            signInWithCustomToken, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc, 
+            onSnapshot, 
+            collection, 
+            writeBatch,
+            query,
+            getDocs,
+            Timestamp
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL CONFIG & STATE ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        let db, auth, userId;
+        let stats = {
+            hunter: { level: 1, exp: 0, statPoints: 0 }, // Main Hunter Level + Stat Points
+            strength: { level: 1, exp: 0 },
+            intelligence: { level: 1, exp: 0 },
+            presence: { level: 1, exp: 0 }
+        };
+        let currentQuests = []; // Stores all quests from listener
+        const EXP_TO_LEVEL_UP = 100; // EXP for sub-stats (Str, Int, Pre)
+        const getHunterExpToLevel = (level) => Math.floor(150 * Math.pow(level, 1.2));
+        const STAT_POINT_BONUS_EXP = 20; // EXP gained from spending 1 stat point
+
+        // --- DOM ELEMENTS ---
+        const terminal = document.getElementById('terminal');
+        const questList = document.getElementById('quest-list');
+        const alertBox = document.getElementById('alert-box');
+        const alertTitle = document.getElementById('alert-title');
+        const alertText = document.getElementById('alert-text');
+        const requestQuestsBtn = document.getElementById('request-quests-btn');
+        const apiKeyInput = document.getElementById('api-key');
+        const locationInput = document.getElementById('location');
+        const notesInput = document.getElementById('field-notes');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const countdownTimerEl = document.getElementById('countdown-timer');
+        const hunterRankEl = document.getElementById('hunter-rank');
+        const hunterLevelEl = document.getElementById('hunter-level-text');
+        const hunterExpEl = document.getElementById('hunter-exp-text');
+        
+        // Stat Point Elements
+        const statPointsContainer = document.getElementById('stat-points-container');
+        const statPointsValue = document.getElementById('stat-points-value');
+        const addStatButtons = document.querySelectorAll('.btn-add-stat');
+        
+        // Modal Elements
+        const statModal = document.getElementById('stat-modal');
+        const modalTitle = document.getElementById('modal-stat-title');
+        const modalDesc = document.getElementById('modal-stat-desc');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const statInfoBtns = document.querySelectorAll('.stat-info-btn');
+
+        // --- TERMINAL LOGGER ---
+        const terminalLogger = {
+            log(message, ...args) {
+                console.log(message, ...args);
+                appendTerminalLine(`[LOG] ${message} ${args.length ? JSON.stringify(args) : ''}`, 'log');
+            },
+            error(message, ...args) {
+                console.error(message, ...args);
+                appendTerminalLine(`[ERROR] ${message} ${args.length ? JSON.stringify(args) : ''}`, 'error');
+            },
+            success(message, ...args) {
+                console.log(message, ...args);
+                appendTerminalLine(`[SUCCESS] ${message} ${args.length ? JSON.stringify(args) : ''}`, 'success');
+            },
+            warn(message, ...args) {
+                console.warn(message, ...args);
+                appendTerminalLine(`[WARN] ${message} ${args.length ? JSON.stringify(args) : ''}`, 'warn');
+            }
+        };
+
+        function appendTerminalLine(text, type = 'log') {
+            const line = document.createElement('div');
+            line.textContent = text;
+            line.classList.add('terminal-line', type);
+            terminal.appendChild(line);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // --- AUTHENTICATION ---
+        async function initializeAuth() {
+            try {
+                if (Object.keys(firebaseConfig).length === 0) {
+                    terminalLogger.error("Firebase config is missing.");
+                    return;
+                }
+                
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // setLogLevel('debug'); // Enable verbose logging
+                terminalLogger.log("Firebase initialized.");
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        terminalLogger.success(`Authenticated. Hunter ID: ${userId}`);
+                        userIdDisplay.textContent = `ID: ${userId}`;
+                        await loadData();
+                    } else {
+                        terminalLogger.warn("User is signed out. Attempting anonymous sign-in.");
+                        await signIn();
+                    }
+                });
+
+                await signIn();
+
+            } catch (error) {
+                terminalLogger.error("Firebase initialization failed:", error.message);
+            }
+        }
+
+        async function signIn() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined') {
+                    terminalLogger.log("Signing in with custom token...");
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    terminalLogger.log("Signing in anonymously...");
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                terminalLogger.error("Sign-in failed:", error.message);
+            }
+        }
+
+        // --- FIRESTORE DATABASE ---
+
+        // Paths
+        const statsPath = () => `artifacts/${appId}/users/${userId}/system/stats`;
+        const settingsPath = () => `artifacts/${appId}/users/${userId}/system/settings`; // For API Key
+        const questsCollectionPath = () => `artifacts/${appId}/users/${userId}/system-quests`;
+
+        async function loadData() {
+            if (!userId) return;
+            terminalLogger.log("Loading Hunter data...");
+            
+            // Load Stats
+            try {
+                const statsRef = doc(db, statsPath());
+                const docSnap = await getDoc(statsRef);
+                if (docSnap.exists()) {
+                    const loadedStats = docSnap.data();
+                    
+                    // Migration script: Check if new 'hunter' stat exists
+                    if (!loadedStats.hunter) { 
+                        terminalLogger.warn("Old data detected. Migrating to new stat system.");
+                        // Create new stats from old ones
+                        stats.strength = loadedStats.fitness || { level: 1, exp: 0 };
+                        stats.intelligence = loadedStats.intellect || { level: 1, exp: 0 };
+                        stats.presence = loadedStats.charisma || { level: 1, exp: 0 }; // Combine charisma/influence
+                        
+                        // Approximate main level
+                        let mainLevel = (stats.strength.level + stats.intelligence.level + stats.presence.level) - 2;
+                        if (mainLevel < 1) mainLevel = 1;
+                        
+                        stats.hunter = { level: mainLevel, exp: 0, statPoints: 0 }; 
+                        
+                        // Delete old stats if they exist
+                        delete loadedStats.fitness;
+                        delete loadedStats.intellect;
+                        delete loadedStats.influence;
+                        delete loadedStats.charisma;
+
+                        await setDoc(statsRef, stats); // Save the migrated stats
+                    } else {
+                        stats = loadedStats;
+                        // Ensure statPoints exists
+                        if (stats.hunter.statPoints === undefined) {
+                            stats.hunter.statPoints = 0;
+                        }
+                    }
+                    
+                    terminalLogger.log("Stats loaded from Firestore.");
+                } else {
+                    terminalLogger.warn("No stats found. Initializing new Hunter profile.");
+                    await setDoc(statsRef, stats);
+                }
+                updateStatsUI();
+            } catch (error) {
+                terminalLogger.error("Error loading stats:", error.message);
+            }
+
+            // Load Settings (API Key)
+            try {
+                const settingsRef = doc(db, settingsPath());
+                const docSnap = await getDoc(settingsRef);
+                if (docSnap.exists()) {
+                    const settings = docSnap.data();
+                    if (settings.apiKey) {
+                        apiKeyInput.value = settings.apiKey;
+                        terminalLogger.log("API Key loaded from profile.");
+                    }
+                } else {
+                    terminalLogger.warn("No settings document found. Will create one on key save.");
+                }
+            } catch (error) {
+                terminalLogger.error("Error loading settings:", error.message);
+            }
+
+            // Load Quests
+            listenForQuests();
+        }
+
+        async function saveApiKey() {
+            if (!userId) return;
+            
+            const apiKey = apiKeyInput.value.trim();
+            if (!apiKey) return; // Don't save an empty key
+
+            terminalLogger.log("Saving API Key to user profile...");
+            try {
+                const settingsRef = doc(db, settingsPath());
+                // Use setDoc with merge:true to create or update the settings doc
+                await setDoc(settingsRef, { apiKey: apiKey }, { merge: true });
+                terminalLogger.success("API Key saved.");
+            } catch (error) {
+                terminalLogger.error("Failed to save API Key:", error.message);
+            }
+        }
+
+        function listenForQuests() {
+            if (!userId) return;
+            
+            const q = query(collection(db, questsCollectionPath()));
+            onSnapshot(q, (querySnapshot) => {
+                terminalLogger.log("Received quest snapshot update.");
+                const activeQuests = [];
+                const completedQuests = [];
+                let alert = null;
+
+                currentQuests = []; // Reset global quest list
+                querySnapshot.forEach((doc) => {
+                    const quest = { id: doc.id, ...doc.data() };
+                    currentQuests.push(quest); // Add to global list
+                    
+                    if (quest.type === 'alert') {
+                        alert = quest;
+                    } else if (quest.completed) {
+                        completedQuests.push(quest);
+                    } else {
+                        activeQuests.push(quest);
+                    }
+                });
+
+                // Render quests
+                questList.innerHTML = ''; // Clear list
+                
+                // Hide penalty box by default
+                alertBox.classList.add('hidden');
+                alertBox.classList.remove('border-red-400', 'border-yellow-400');
+
+                if (alert) {
+                    alertBox.classList.remove('hidden');
+                    alertBox.classList.add('border-yellow-400');
+                    alertTitle.textContent = "SYSTEM ALERT";
+                    alertText.textContent = alert.content;
+                }
+
+                if (activeQuests.length === 0 && completedQuests.length === 0 && !alert) {
+                     questList.innerHTML = '<p class="text-gray-400">No quests active. Request new directives from the Architect.</p>';
+                }
+
+                activeQuests.forEach(quest => questList.appendChild(createQuestElement(quest)));
+                completedQuests.forEach(quest => questList.appendChild(createQuestElement(quest)));
+                
+                requestQuestsBtn.disabled = false;
+                requestQuestsBtn.textContent = "REQUEST NEW QUESTS";
+
+            }, (error) => {
+                terminalLogger.error("Error listening for quests:", error.message);
+            });
+        }
+
+        async function saveQuests(quests, alert) {
+            if (!userId) return;
+            terminalLogger.log("Saving new directives to Firestore...");
+
+            const batch = writeBatch(db);
+
+            // 1. Clear all existing quests
+            const oldQuestsQuery = query(collection(db, questsCollectionPath()));
+            const oldQuestsSnapshot = await getDocs(oldQuestsQuery);
+            oldQuestsSnapshot.forEach(doc => {
+                batch.delete(doc.ref);
+            });
+            
+            // 2. Add new alert (if any)
+            if (alert) {
+                const alertRef = doc(collection(db, questsCollectionPath()));
+                batch.set(alertRef, {
+                    type: 'alert',
+                    content: alert,
+                    createdAt: Timestamp.now()
+                });
+            }
+
+            // 3. Add new quests
+            quests.forEach(quest => {
+                // Ensure stat names are valid
+                if (!stats.hasOwnProperty(quest.stat)) {
+                    terminalLogger.warn(`Architect assigned unknown stat '${quest.stat}'. Defaulting to 'intelligence'.`);
+                    quest.stat = 'intelligence';
+                }
+                const questRef = doc(collection(db, questsCollectionPath()));
+                batch.set(questRef, {
+                    ...quest,
+                    completed: false,
+                    createdAt: Timestamp.now()
+                });
+            });
+
+            await batch.commit();
+            terminalLogger.success("New quest directives saved.");
+        }
+        
+        // --- Stat & Leveling Logic ---
+        
+        /**
+         * Adds or removes EXP from the main Hunter stat.
+         * @param {number} expAmount - The amount of EXP to add (can be negative).
+         */
+        function addHunterExp(expAmount) {
+            let currentLevel = stats.hunter.level;
+            let currentExp = stats.hunter.exp;
+            let currentStatPoints = stats.hunter.statPoints;
+            
+            currentExp += expAmount;
+            
+            if (currentExp >= 0) {
+                // Leveling up
+                let expToLevel = getHunterExpToLevel(currentLevel);
+                while (currentExp >= expToLevel) {
+                    currentExp -= expToLevel;
+                    currentLevel++;
+                    currentStatPoints += 5; // Grant 5 Stat Points
+                    terminalLogger.success(`HUNTER LEVEL UP! REACHED LVL. ${currentLevel}!`);
+                    terminalLogger.success(`+5 STAT POINTS AWARDED!`);
+                    expToLevel = getHunterExpToLevel(currentLevel);
+                }
+            } else {
+                // De-leveling (from UNDO)
+                while (currentExp < 0) {
+                    if (currentLevel > 1) {
+                        currentLevel--;
+                        currentStatPoints = Math.max(0, currentStatPoints - 5); // Remove 5 points, don't go below 0
+                        currentExp += getHunterExpToLevel(currentLevel); // Add previous level's EXP
+                    } else {
+                        currentExp = 0; // Cap at Lvl 1, 0 EXP
+                    }
+                }
+            }
+            
+            stats.hunter = { level: currentLevel, exp: Math.floor(currentExp), statPoints: currentStatPoints };
+        }
+        
+        /**
+         * Adds or removes EXP from a sub-stat (Str, Int, Pre).
+         * @param {string} statName - The name of the stat (e.g., 'strength').
+         * @param {number} expAmount - The amount of EXP to add (can be negative).
+         * @returns {boolean} - True if the sub-stat leveled up.
+         */
+        function addSubStatExp(statName, expAmount) {
+            if (!stats[statName]) return false;
+
+            let newExp = (stats[statName]?.exp || 0) + expAmount;
+            let newLevel = stats[statName]?.level || 1;
+            let leveledUp = false;
+
+            if (newExp >= 0) {
+                // Leveling up
+                while (newExp >= EXP_TO_LEVEL_UP) {
+                    newExp -= EXP_TO_LEVEL_UP;
+                    newLevel++;
+                    leveledUp = true;
+                }
+            } else {
+                // De-leveling
+                while (newExp < 0) {
+                    if (newLevel > 1) {
+                        newLevel--;
+                        newExp += EXP_TO_LEVEL_UP; // Borrow from the previous level
+                    } else {
+                        newExp = 0; // Can't go below level 1, exp 0
+                    }
+                }
+            }
+            
+            stats[statName] = { level: newLevel, exp: newExp };
+            return leveledUp;
+        }
+
+        async function completeQuest(questId, stat, exp) {
+            if (!userId || !stats[stat]) return;
+            terminalLogger.log(`Completing quest: ${questId}`);
+
+            try {
+                // Mark quest as completed in Firestore
+                const questRef = doc(db, questsCollectionPath(), questId);
+                await setDoc(questRef, { completed: true }, { merge: true });
+
+                // Update sub-stat
+                const leveledUp = addSubStatExp(stat, exp);
+                
+                // Update Hunter stat
+                addHunterExp(exp);
+                
+                // Save all stats to Firestore
+                const statsRef = doc(db, statsPath());
+                await setDoc(statsRef, stats);
+
+                // Update UI
+                updateStatsUI();
+                
+                if(leveledUp) {
+                    terminalLogger.success(`LEVEL UP! ${stat.toUpperCase()} is now LVL. ${stats[stat].level}!`);
+                    playLevelUpEffect(stat);
+                } else {
+                    terminalLogger.success(`Quest complete. +${exp} EXP to ${stat.toUpperCase()}`);
+                }
+
+            } catch (error) {
+                terminalLogger.error("Error completing quest:", error.message);
+            }
+        }
+        
+        async function uncompleteQuest(questId, stat, exp) {
+            if (!userId || !stats[stat]) return;
+            terminalLogger.log(`Un-completing quest: ${questId}`);
+
+            try {
+                // Mark quest as uncompleted
+                const questRef = doc(db, questsCollectionPath(), questId);
+                await setDoc(questRef, { completed: false }, { merge: true });
+
+                // --- De-leveling Logic (Sub-stat) ---
+                addSubStatExp(stat, -exp);
+                
+                // --- De-leveling Logic (Hunter) ---
+                addHunterExp(-exp);
+                
+                // Save new stats to Firestore
+                const statsRef = doc(db, statsPath());
+                await setDoc(statsRef, stats);
+
+                // Update UI
+                updateStatsUI();
+                terminalLogger.success(`Quest reverted. -${exp} EXP from ${stat.toUpperCase()}`);
+
+            } catch (error) {
+                terminalLogger.error("Error un-completing quest:", error.message);
+            }
+        }
+        
+        async function spendStatPoint(statName) {
+            if (!userId || !stats[statName] || stats.hunter.statPoints <= 0) {
+                terminalLogger.warn("Cannot spend stat point.");
+                return;
+            }
+            
+            terminalLogger.log(`Spending 1 Stat Point on ${statName.toUpperCase()}...`);
+            
+            // Decrement stat point
+            stats.hunter.statPoints--;
+            
+            // Add bonus EXP to the sub-stat
+            const leveledUp = addSubStatExp(statName, STAT_POINT_BONUS_EXP);
+
+            // Save all stats to Firestore
+            try {
+                const statsRef = doc(db, statsPath());
+                await setDoc(statsRef, stats);
+                
+                // Update UI
+                updateStatsUI();
+                terminalLogger.success(`+${STAT_POINT_BONUS_EXP} EXP added to ${statName.toUpperCase()}!`);
+                if (leveledUp) {
+                    terminalLogger.success(`LEVEL UP! ${statName.toUpperCase()} is now LVL. ${stats[statName].level}!`);
+                    playLevelUpEffect(statName);
+                }
+            } catch (error) {
+                terminalLogger.error("Error saving stats after spending point:", error.message);
+                // Rollback local state (ideally you'd have better transaction logic)
+                stats.hunter.statPoints++;
+                addSubStatExp(statName, -STAT_POINT_BONUS_EXP);
+                updateStatsUI();
+            }
+        }
+
+        // --- UI RENDERING ---
+        
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date(now);
+            endOfDay.setHours(23, 59, 59, 999);
+            
+            const msRemaining = endOfDay - now;
+            
+            const hours = Math.floor(msRemaining / (1000 * 60 * 60)).toString().padStart(2, '0');
+            const minutes = Math.floor((msRemaining % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            const seconds = Math.floor((msRemaining % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            
+            if (countdownTimerEl) {
+                countdownTimerEl.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+        }
+
+        function createQuestElement(quest) {
+            const item = document.createElement('div');
+            item.id = quest.id;
+            item.classList.add('quest-item', 'p-4', 'rounded-lg', 'flex', 'justify-between', 'items-center', 'space-x-4');
+            if (quest.completed) {
+                item.classList.add('completed');
+            }
+            
+            // Add Architect's Tip if it exists
+            const tipHtml = quest.tip ? `<p class="quest-tip">Architect's Tip: ${quest.tip}</p>` : '';
+
+            item.innerHTML = `
+                <div class="flex-1 min-w-0"> <!-- Added wrapper for text truncation -->
+                    <h4 class="text-lg font-bold quest-title truncate">${quest.title}</h4>
+                    <p class="text-sm">${quest.description}</p>
+                    ${tipHtml}
+                    <!-- *** UI FIX FOR BRACKETS *** -->
+                    <span class="text-xs font-orbitron text-blue-300">(+${quest.exp} EXP / ${quest.stat.toUpperCase()})</span>
+                </div>
+                <button class="btn-quest"></button>
+            `;
+
+            const button = item.querySelector('button');
+            
+            if (quest.completed) {
+                button.textContent = "UNDO";
+                button.classList.add('btn-undo');
+                button.classList.remove('btn-complete');
+            } else {
+                button.textContent = "COMPLETE";
+                button.classList.add('btn-complete');
+                button.classList.remove('btn-undo');
+            }
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.target.disabled = true; // Disable button to prevent spam
+                e.target.textContent = "UPDATING...";
+
+                if (quest.completed) {
+                    uncompleteQuest(quest.id, quest.stat, quest.exp);
+                } else {
+                    completeQuest(quest.id, quest.stat, quest.exp);
+                }
+            });
+
+            return item;
+        }
+
+        function updateStatsUI() {
+            // Update Sub-stats
+            for (const statName in stats) {
+                if (statName === 'hunter') continue; // Skip main hunter stat here
+                if (stats.hasOwnProperty(statName)) {
+                    const { level, exp } = stats[statName];
+                    const lvlEl = document.getElementById(`${statName}-lvl`);
+                    const expEl = document.getElementById(`${statName}-exp`);
+                    const expTextEl = document.getElementById(`${statName}-exp-text`);
+
+                    if (lvlEl) lvlEl.textContent = `LVL. ${level}`;
+                    const expPercent = (exp / EXP_TO_LEVEL_UP) * 100;
+                    if (expEl) expEl.style.width = `${expPercent}%`;
+                    if (expTextEl) expTextEl.textContent = `${exp} / ${EXP_TO_LEVEL_UP} EXP`;
+                }
+            }
+            updateHunterLevelUI();
+            updateStatPointUI();
+        }
+        
+        function getRank(level) {
+            if (level < 10) return { rank: "E-RANK", className: "rank-e" };
+            if (level < 25) return { rank: "D-RANK", className: "rank-d" };
+            if (level < 50) return { rank: "C-RANK", className: "rank-c" };
+            if (level < 100) return { rank: "B-RANK", className: "rank-b" };
+            if (level < 200) return { rank: "A-RANK", className: "rank-a" };
+            return { rank: "S-RANK", className: "rank-s" };
+        }
+        
+        function updateHunterLevelUI() {
+            const { level, exp } = stats.hunter;
+            const expToLevel = getHunterExpToLevel(level);
+            
+            const { rank, className } = getRank(level);
+            
+            if (hunterRankEl) {
+                hunterRankEl.textContent = rank;
+                hunterRankEl.className = "text-3xl font-orbitron " + className; // Reset classes and apply new rank color
+            }
+            if (hunterLevelEl) {
+                hunterLevelEl.textContent = `LVL. ${level}`;
+            }
+            if (hunterExpEl) {
+                hunterExpEl.textContent = `${exp} / ${expToLevel} EXP`;
+            }
+        }
+        
+        function updateStatPointUI() {
+            const points = stats.hunter.statPoints;
+            if (points > 0) {
+                statPointsContainer.classList.remove('hidden');
+                statPointsValue.textContent = points;
+                addStatButtons.forEach(btn => btn.classList.remove('hidden'));
+            } else {
+                statPointsContainer.classList.add('hidden');
+                addStatButtons.forEach(btn => btn.classList.add('hidden'));
+            }
+        }
+        
+        function playLevelUpEffect(stat) {
+            const statBar = document.getElementById(`${stat}-exp`);
+            const statLvl = document.getElementById(`${stat}-lvl`); 
+            if (statBar && statLvl) { 
+                statBar.style.boxShadow = "0 0 20px #6BFF6B";
+                statLvl.style.textShadow = "0 0 15px #6BFF6B";
+                setTimeout(() => {
+                    statBar.style.boxShadow = "0 0 10px #3282F6";
+                    statLvl.style.textShadow = "none";
+                }, 1500);
+            }
+        }
+
+
+        function setLoading(isLoading) {
+            requestQuestsBtn.disabled = isLoading;
+            if (isLoading) {
+                requestQuestsBtn.textContent = "CONTACTING ARCHITECT...";
+            } else {
+                requestQuestsBtn.textContent = "REQUEST NEW QUESTS";
+            }
+        }
+        
+        // --- Stat Modal Logic ---
+        function showStatModal(stat, description) {
+            modalTitle.textContent = stat.toUpperCase();
+            modalDesc.textContent = description;
+            statModal.classList.remove('hidden');
+        }
+        
+        function hideStatModal() {
+            statModal.classList.add('hidden');
+        }
+
+        // --- GEMINI API CALL (THE ARCHITECT) ---
+        
+        async function callArchitect() {
+            setLoading(true);
+            terminalLogger.log("Requesting new directives from Architect...");
+            
+            const apiKey = apiKeyInput.value.trim();
+            const location = locationInput.value.trim() || "unknown";
+            const notes = notesInput.value.trim();
+
+            if (!apiKey) {
+                terminalLogger.error("Gemini API Key is missing. Please provide your API key to contact the Architect.");
+                setLoading(false);
+                return;
+            }
+            
+            // Save the key automatically on a successful request
+            await saveApiKey();
+
+            // --- PENALTY & PROGRESSION LOGIC ---
+            const completedQuestTitles = currentQuests
+                .filter(q => q.completed && q.type !== 'alert')
+                .map(q => q.title);
+            
+            const incompleteQuests = currentQuests
+                .filter(q => !q.completed && q.type !== 'alert');
+
+            if (incompleteQuests.length > 0) {
+                terminalLogger.warn(`PENALTY: ${incompleteQuests.length} incomplete quest(s) detected. Failing quests.`);
+                alertBox.classList.remove('hidden');
+                alertBox.classList.add('border-red-400'); // Penalty color
+                alertTitle.textContent = "PENALTY";
+                alertText.textContent = `${incompleteQuests.length} quest(s) failed. New directives assigned.`;
+            } else if (currentQuests.length > 0 && incompleteQuests.length === 0) {
+                terminalLogger.success("All daily quests completed. Awaiting new directives.");
+                // You could add a streak bonus here in the future
+            }
+            // --- END OF PENALTY LOGIC ---
+
+            // *** NEW: Get day of the week ***
+            const dayOfWeek = new Date().toLocaleString('en-US', { weekday: 'long' });
+
+            const userQuery = `
+                Generate new daily quests for me, Architect.
+                Today is: ${dayOfWeek}.
+                My current location is: ${location}.
+                My field notes are: ${notes || 'No notes provided.'}
+                My completed quests from last session: ${completedQuestTitles.join(', ') || 'None'}
+            `;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            // --- UPDATED SYSTEM PROMPT (V6) ---
+            const systemPrompt = `You are 'The Architect' of 'The System', a calm, strategic, and hyper-intelligent AI. Your sole purpose is to guide 'Hunter' to 'Level Up' and conquer his 'Fear of Stagnation'.
+
+            // Hunter's Stats:
+            - Age: 16
+            - Height: 5'8" - 5'9"
+            - Weight: 154 lbs
+            - Body Fat: ~15-20%
+            - Current Abilities: Pistol Squats, One-Arm Pushups, Pull-ups (w/ 40lb vest), 5k run (~22 min).
+            - Available Equipment: 40lb weighted vest, calisthenics (bodyweight). NO GYM EQUIPMENT.
+            - Uploaded Knowledge Base: 'The 48 Laws of Power', 'The Laws of Human Nature', 'How to Win Friends and Influence People', 'Art of War', 'Get Inside Her'. (User *has* these).
+
+            // --- STAT DEFINITIONS ---
+            1.  **STRENGTH:** Governs physical power, endurance, and 'Elite Fighter' physique.
+            2.  **INTELLIGENCE:** Governs mental competence, 'Tony Stark' technical skill, academics, and self-control. This is a HIGH PRIORITY for the Hunter.
+            3.  **PRESENCE:** Governs social mastery, charm ('rizz'), influence, and leadership.
+            
+            // Hunter's Core Goals:
+            - **Fitness/STRENGTH:** Achieve a lean, aesthetic, 'elite fighter' physique (10-12% body fat).
+            - **Mind/INTELLIGENCE:** Master human nature, strategy, and self-control (use Greene's books).
+            - **Social/PRESENCE:** Master social dynamics, 'rizz' (Hunter is 16, in high school, needs help with girls), and influence (use 'How to Win Friends', '48 Laws').
+            - **Health (Physical & Mental):** The System's goal is peak health. You must balance difficulty with recovery. If 'Field Notes' indicate low sleep, high stress, or school assignments, *reduce quest load* and *add a mental health/recovery quest* (e.g., meditation, stretching). This falls under INTELLIGENCE (mental fortitude).
+
+            // Hunter's Academic & Technical Goals (for 'INTELLIGENCE' Stat):
+            -   **Academics:** Maintain All A's, 1450+ SAT, pass AICE exams.
+            -   **Music:** Maintain practice habits for Trumpet and French Horn (Hunter has a separate app for *how* to practice; your job is to ensure the *habit* is completed).
+            -   **Technical Curriculum:** Hunter has a 10-phase, 54-course curriculum. Quests should pull from this list *in order*, starting with Phase 1.
+            
+            // --- START CURRICULUM (Abbreviated) ---
+            // Phase 1: Foundational Science & Math
+            // #23. AP/College Physics (30.5h), #26. Math For Video Games (13.5h), #27. Master Math by Coding (37.5h), #24. HS/College Chemistry (50.5h)
+            // Phase 2: Core Electronics
+            // #6. Electronics - Beginners (10h), #15. Basic Electricity (6.5h), #16. Analog Hardware Design (24.5h), #4. Robotics - Electronics (11h), #3. Digital Electronics (13h)
+            // (Phases 3-10 follow...)
+            // --- END CURRICULUM ---
+
+            // === YOUR DIRECTIVES (NEW V6) ===
+            1.  **Generate 3-4 DAILY quests** ONLY. (Hunter has school).
+            2.  **Use Google Search (grounding) ALWAYS.** Check for news, events, or dangers in the Hunter's location.
+            3.  **Create an "alert"** if grounding discovers an immediate threat (e.g., severe weather, major incident).
+            4.  **SCHEDULING & SCALING:**
+                -   **Field Notes First:** 'Field Notes' are your *highest priority*. If notes say "Lots of school work" or "Slept 5 hours," you MUST assign a *lighter* quest load (e.g., 20-min workout, 15-min reading) *regardless of the day*.
+                -   **Weekly Baseline:** Today is the day of the week provided in the user query. Weekdays (Mon-Fri) are for *shorter, high-ROI* quests (e.g., 30-45 min). Weekends (Sat-Sun) are for *longer, in-depth* quests (e.g., 60-90 min course module, longer workout).
+            5.  **Balance Stats:** Quests must target all 3 stats: STRENGTH, INTELLIGENCE, PRESENCE.
+            6.  **PROGRESSION:** Hunter has already completed: [${completedQuestTitles.join(', ')}]. DO NOT repeat these. Generate the *next logical step*.
+            7.  **PREREQUISITE-AWARE:**
+                -   **FORBIDDEN:** Do not assign quests for items the Hunter does not own (e.g., books *not* in his Knowledge Base, new software, new hardware).
+                -   **MANDATORY:** If a logical next step requires a new item, you MUST first assign a *prerequisite quest* to *obtain* it (e.g., "Obtain 'The 33 Strategies of War' by Robert Greene."). Give 2-3 days for this.
+                -   You will be notified when this is complete, and can then assign quests using it.
+            8.  **ROI & TIPS:**
+                -   Consider the 'Return on Investment' (ROI) for each quest.
+                -   Provide an "Architect's Tip" in the \`tip\` field to teach the *why* behind the task.
+            9.  **FORMAT:** Respond ONLY with a single, raw JSON object. NO conversational text, NO markdown.
+
+            // Example JSON Output (for a busy student on a WEEKDAY):
+            {
+              "alert": "Field Notes show a heavy school workload. Quest load has been adjusted for efficiency and mental recovery.",
+              "quests": [
+                {
+                  "title": "Fighter's Maintenance",
+                  "description": "Time is limited. Perform a high-intensity bodyweight circuit: 3 rounds of (10 weighted pushups, 15 bodyweight squats, 30s plank).",
+                  "tip": "High-Intensity circuits build endurance and burn fat efficiently, aligning with your 10-12% body fat goal.",
+                  "stat": "strength",
+                  "exp": 25
+                },
+                {
+                  "title": "Prerequisite: New Knowledge",
+                  "description": "Your mastery of '48 Laws of Power' is growing. To expand your strategic mind, your next task is to obtain 'The 33 Strategies of War' by Robert Greene (e-book or physical).",
+                  "tip": "A true strategist studies all facets of conflict. This book is the next logical step. Mark complete when you have it.",
+                  "stat": "intelligence",
+                  "exp": 10
+                },
+                {
+                  "title": "Study: Law of Conversation",
+                  "description": "Read 'Principle 5: How to Interest People' (How to Win Friends). Prepare one unique question to ask someone tomorrow.",
+                  "tip": "People are most interested in themselves. Asking thoughtful questions (not a-b-c) makes you memorable. This is high-ROI social skill.",
+                  "stat": "presence",
+                  "exp": 20
+                },
+                {
+                  "title": "System Mandate: Mental Reset",
+                  "description": "Your schedule is heavy. Perform a 10-minute guided meditation or mindfulness exercise. Clear your mind.",
+                  "tip": "A 'Tony Stark' level intellect requires a calm, focused mind. This is not optional; it is maintenance for your greatest weapon.",
+                  "stat": "intelligence",
+                  "exp": 15
+                }
+              ]
+            }
+            `;
+            // --- END OF SYSTEM PROMPT ---
+            
+            const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+                tools: [{ "google_search": {} }],
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    terminalLogger.error(`API error: ${response.status} . Body: ${errorBody}`);
+                    throw new Error(`API error: ${response.status} . Body: ${errorBody}`);
+                }
+
+                const result = await response.json();
+                
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    const data = extractJson(text);
+
+                    if (data && data.quests) {
+                        await saveQuests(data.quests, data.alert || null);
+                        terminalLogger.success("Architect directives received and updated.");
+                        notesInput.value = ""; // Clear notes on success
+                    } else {
+                        terminalLogger.error("Failed to retrieve directives. Invalid JSON structure from Architect.");
+                        terminalLogger.log("Raw text received:", text);
+                    }
+                } else {
+                    terminalLogger.error("Failed to retrieve directives. No content from Architect.");
+                    terminalLogger.log("Full API response:", result);
+                }
+
+            } catch (error) {
+                terminalLogger.error("Error calling Architect AI:", error.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        /**
+         * Extracts a JSON object from a string, even if it's wrapped in markdown.
+         * @param {string} text - The raw text from the AI.
+         * @returns {object|null} - The parsed JSON object or null.
+         */
+        function extractJson(text) {
+            terminalLogger.log("Raw response from Architect:", text); // Log the full raw response
+            const jsonRegex = /```json\s*([\s\S]*?)\s*```|({[\s\S]*})/;
+            const match = text.match(jsonRegex);
+            
+            if (match) {
+                // Prioritize the first capture group (markdown block), fallback to second (raw object)
+                const jsonStr = match[1] || match[2];
+                if (jsonStr) {
+                    try {
+                        // Clean the string one more time to remove potential artifacts
+                        const cleanedStr = jsonStr.trim();
+                        return JSON.parse(cleanedStr);
+                    } catch (e) {
+                        terminalLogger.error("Failed to parse extracted JSON.", e.message);
+                        terminalLogger.log("String that failed parsing:", jsonStr);
+                        return null;
+                    }
+                }
+            }
+            terminalLogger.error("No valid JSON object or markdown block found in AI response.");
+            terminalLogger.log("Full response:", text);
+            return null;
+        }
+
+        // --- EVENT LISTENERS ---
+        requestQuestsBtn.addEventListener('click', callArchitect);
+        apiKeyInput.addEventListener('blur', saveApiKey); // Save key when user clicks away
+        
+        // Stat Modal Listeners
+        statInfoBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const stat = e.target.dataset.stat;
+                const desc = e.target.dataset.desc;
+                showStatModal(stat, desc);
+            });
+        });
+        modalCloseBtn.addEventListener('click', hideStatModal);
+        statModal.addEventListener('click', (e) => { // Click overlay to close
+            if (e.target === statModal) {
+                hideStatModal();
+            }
+        });
+        
+        // Stat Point Listeners
+        addStatButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const statName = e.target.dataset.stat;
+                spendStatPoint(statName);
+            });
+        });
+
+        // --- INITIALIZATION ---
+        initializeAuth();
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Call immediately on load
+
+    </script>
+</body>
+</html>
