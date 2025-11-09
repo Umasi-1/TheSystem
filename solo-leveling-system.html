@@ -13,10 +13,7 @@
     <!-- === End Meta Tags === -->
 
     <!-- === NEW: App Icon === -->
-    <!-- A custom, self-contained SVG icon (a glowing blue crystal) -->
-    <!-- Favicon for browsers -->
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%235C9FFF;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%233282F6;stop-opacity:1' /%3E%3C/linearGradient%3E%3Cfilter id='svgGlow' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='4' result='blur' /%3E%3CfeMerge%3E%3CfeMergeNode in='blur' /%3E%3CfeMergeNode in='SourceGraphic' /%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cpath d='M50 5 L70 35 L50 95 L30 35 Z' fill='url(%23grad)' filter='url(%23svgGlow)' stroke='%23aabbee' stroke-width='2'/%3E%3C/svg%3E" type="image/svg+xml">
-    <!-- Apple Touch Icon for iOS Home Screen -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%235C9FFF;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%233282F6;stop-opacity:1' /%3E%3C/linearGradient%3E%3Cfilter id='svgGlow' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='4' result='blur' /%3E%3CfeMerge%3E%3CfeMergeNode in='blur' /%3E%3CfeMergeNode in='SourceGraphic' /%3E%3C/feMerge%3E%3C/defs%3E%3Cpath d='M50 5 L70 35 L50 95 L30 35 Z' fill='url(%23grad)' filter='url(%23svgGlow)' stroke='%23aabbee' stroke-width='2'/%3E%3C/svg%3E" type="image/svg+xml">
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%235C9FFF;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%233282F6;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M50 5 L70 35 L50 95 L30 35 Z' fill='url(%23grad)' stroke='%23aabbee' stroke-width='2'/%3E%3C/svg%3E">
     <!-- === End App Icon === -->
 
@@ -149,9 +146,91 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-            overflow-y: auto; /* This is the main scrolling area */
+            overflow: hidden; /* This area MANAGES scrolling, not scrolls itself */
         }
+        .main-content-area { /* This is the new scrolling container */
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        /* NEW: Main tab styles */
+        .main-tab-bar {
+            display: flex;
+            border-bottom: 1px solid #2a406b;
+            flex-shrink: 0;
+        }
+        .main-tab-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: #88AADD;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            background: rgba(10, 10, 20, 0.3);
+        }
+        .main-tab-btn.active {
+            color: #FFFFFF;
+            border-bottom-color: #3282F6;
+            background: rgba(20, 30, 60, 0.5);
+        }
+        .main-tab-content {
+            display: none;
+            /* height: 100%; */ /* <--- REMOVED THIS LINE */
+            flex: 1; /* <--- ADDED THIS LINE */
+            flex-direction: column;
+            min-height: 0; /* <--- THIS IS THE NEW FIX */
+        }
+        .main-tab-content.active {
+            display: flex;
+        }
+        
+        /* NEW: Intel Briefing styles */
+        #intel-briefing-content {
+            line-height: 1.7;
+        }
+        #intel-briefing-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #3282F6;
+            border-bottom: 1px solid #2a406b;
+            padding-bottom: 8px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+        #intel-briefing-content h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            color: #88AADD;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        #intel-briefing-content p {
+            margin-bottom: 12px;
+        }
+        #intel-briefing-content ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-bottom: 12px;
+        }
+        #intel-briefing-content li {
+            margin-bottom: 8px;
+        }
+        #intel-briefing-content strong.highlight {
+            color: #F97316; /* Orange */
+        }
+        #intel-briefing-content strong.threat {
+            color: #EF4444; /* Red */
+        }
+        #intel-briefing-content .intel-analysis {
+            font-style: italic;
+            border-left: 3px solid #3282F6;
+            padding-left: 12px;
+            color: #a3b8e0;
+        }
+
 
         /* Stats section */
         .stat-bar {
@@ -193,25 +272,6 @@
             color: #0A0A0F;
         }
         
-        /* Stat point allocation button */
-        .btn-add-stat {
-            font-family: 'Orbitron', sans-serif;
-            background: #1a2a1a;
-            border: 1px solid #3a7b4a;
-            color: #88AA88;
-            border-radius: 50%;
-            width: 1.5rem;
-            height: 1.5rem;
-            line-height: 1;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .btn-add-stat:hover {
-            background: #2a4a2a;
-            color: #AAEFAA;
-            box-shadow: 0 0 10px #3a7b4a;
-        }
-
         /* Quest list item */
         .quest-item {
             background: rgba(30, 40, 70, 0.3);
@@ -263,6 +323,22 @@
             cursor: not-allowed;
             box-shadow: none;
         }
+        .btn-secondary {
+            background: #1e2d4d;
+            border-color: #2a406b;
+        }
+        .btn-secondary:hover {
+            background: #2a406b;
+        }
+        .btn-danger {
+            background: #4a2a2a;
+            border-color: #7b3a3a;
+        }
+        .btn-danger:hover {
+            background: #7b3a3a;
+            box-shadow: 0 0 15px #ef4444;
+        }
+
 
         /* Quest complete/undo buttons */
         .btn-quest {
@@ -338,20 +414,27 @@
         }
 
         /* Input fields */
-        .input-system {
+        .input-system, .select-system {
             background-color: #0A0A0F;
             border: 1px solid #2a406b;
             color: #E0E0E0;
             padding: 10px;
             -webkit-appearance: none; /* Fix for iOS input zoom */
         }
-        .input-system:focus {
+        .input-system:focus, .select-system:focus {
             outline: none;
             border-color: #3282F6;
             box-shadow: 0 0 10px #3282F6;
         }
+        .select-system {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%2388AADD' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
         
-        /* Modal for Stat Description */
+        /* Modal for Stat Description & Placement Test */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -375,6 +458,20 @@
             max-width: 400px;
             z-index: 1001;
         }
+        /* Fullscreen modal for placement test */
+        .modal-fullscreen {
+            max-width: 95%;
+            height: 95%;
+            width: 95%;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-fullscreen .modal-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px; /* space for scrollbar */
+        }
 
         /* Rank Colors */
         .rank-e { color: #94a3b8; } /* slate-400 */
@@ -383,6 +480,31 @@
         .rank-b { color: #a855f7; } /* purple-500 */
         .rank-a { color: #f97316; } /* orange-500 */
         .rank-s { color: #ef4444; text-shadow: 0 0 8px #ef4444; } /* red-500 */
+        
+        /* Tab Styles (Left Panel) */
+        .tab-bar {
+            display: flex;
+            border-bottom: 1px solid #2a406b;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            color: #88AADD;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            color: #FFFFFF;
+            border-bottom-color: #3282F6;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
 
     </style>
 </head>
@@ -398,17 +520,95 @@
                     <p id="hunter-level-text" class="text-lg text-white">LVL. 1</p>
                     <p id="hunter-exp-text" class="text-xs text-blue-300">0 / 150 EXP</p>
                 </div>
-                <!-- Stat Points Display -->
-                <div id="stat-points-container" class="hidden my-2">
-                    <span class="text-xl font-orbitron text-green-400">STAT POINTS:</span>
-                    <span id="stat-points-value" class="text-xl font-orbitron text-green-400">0</span>
-                </div>
                 <p id="user-id-display" class="text-xs text-blue-300 break-all">ID: [CONNECTING...]</p>
             </header>
 
-            <!-- CONTROLS SECTION -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1">SYSTEM CONTROLS</h3>
+            <!-- TABS (Left Panel) -->
+            <div class="tab-bar">
+                <div class="tab-btn active" data-tab="profile">PROFILE</div>
+                <div class="tab-btn" data-tab="system">SYSTEM</div>
+            </div>
+
+            <!-- TAB CONTENT: PROFILE -->
+            <div id="tab-profile" class="tab-content active space-y-4">
+                <!-- STATS SECTION -->
+                <div class="space-y-4 flex-1">
+                    <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1">STATS</h3>
+                    
+                    <!-- STRENGTH -->
+                    <div class="stat">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="stat-title text-lg font-semibold text-white">
+                                STRENGTH
+                                <span class="stat-info-btn" data-stat="strength" data-desc="Your physical power, endurance, and health. Governs your 'Elite Fighter' physique and resilience.">?</span>
+                            </span>
+                            <span id="strength-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
+                        </div>
+                        <div class="stat-bar rounded-full">
+                            <div id="strength-exp" class="stat-bar-inner" style="width: 0%;"></div>
+                        </div>
+                        <span id="strength-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
+                    </div>
+
+                    <!-- INTELLIGENCE -->
+                    <div class="stat">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="stat-title text-lg font-semibold text-white">
+                                INTELLIGENCE
+                                <span class="stat-info-btn" data-stat="intelligence" data-desc="Your mental competence, technical skill, and fortitude. Governs your academic, 'Tony Stark' goals, and self-control.">?</span>
+                            </span>
+                            <span id="intelligence-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
+                        </div>
+                        <div class="stat-bar rounded-full">
+                            <div id="intelligence-exp" class="stat-bar-inner" style="width: 0%;"></div>
+                        </div>
+                        <span id="intelligence-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
+                    </div>
+
+                    <!-- PRESENCE -->
+                    <div class="stat">
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="stat-title text-lg font-semibold text-white">
+                                PRESENCE
+                                <span class="stat-info-btn" data-stat="presence" data-desc="Your social mastery, charm, and influence. Governs your ability to lead, persuade, and interact with others.">?</span>
+                            </span>
+                            <span id="presence-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
+                        </div>
+                        <div class="stat-bar rounded-full">
+                            <div id="presence-exp" class="stat-bar-inner" style="width: 0%;"></div>
+                        </div>
+                        <span id="presence-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
+                    </div>
+                </div>
+                
+                <!-- CONTROLS SECTION -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1">DAILY CONTROLS</h3>
+                    
+                    <div>
+                        <label for="stat-focus" class="text-sm font-semibold text-blue-200">STAT FOCUS</LAbel>
+                        <select id="stat-focus" class="select-system w-full rounded mt-1">
+                            <option value="balanced">Balanced (Intelligence+)</option>
+                            <option value="strength">Focus: STRENGTH</option>
+                            <option value="intelligence">Focus: INTELLIGENCE</option>
+                            <option value="presence">Focus: PRESENCE</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="field-notes" class="text-sm font-semibold text-blue-200">FIELD NOTES (Optional)</label>
+                        <textarea id="field-notes" rows="3" class="input-system w-full rounded mt-1" placeholder="e.g., 'Slept 5 hours', 'Garmin 5k time: 21:50', 'All-day event tomorrow', 'Lots of school work'"></textarea>
+                    </div>
+                    
+                    <button id="request-quests-btn" class="btn-system w-full rounded">
+                        REQUEST NEW QUESTS
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: SYSTEM -->
+            <div id="tab-system" class="tab-content space-y-4">
+                <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1">SYSTEM SETTINGS</h3>
                 
                 <div>
                     <label for="api-key" class="text-sm font-semibold text-blue-200">GEMINI API KEY</label>
@@ -419,75 +619,23 @@
                     <label for="location" class="text-sm font-semibold text-blue-200">CURRENT LOCATION</label>
                     <input type="text" id="location" class="input-system w-full rounded mt-1" value="Rockledge, Florida">
                 </div>
-
+                
+                <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1 pt-4">HUNTER STATUS</h3>
+                
                 <div>
-                    <label for="field-notes" class="text-sm font-semibold text-blue-200">FIELD NOTES (Optional)</label>
-                    <textarea id="field-notes" rows="3" class="input-system w-full rounded mt-1" placeholder="e.g., 'Slept 5 hours', 'Garmin 5k time: 21:50', 'All-day event tomorrow', 'Lots of school work'"></textarea>
+                    <label for="quest-feedback" class="text-sm font-semibold text-blue-200">QUEST FEEDBACK</label>
+                    <select id="quest-feedback" class="select-system w-full rounded mt-1">
+                        <option value="just_right">Quests are: Just Right</option>
+                        <option value="too_hard">Quests are: Too Hard</option>
+                        <option value="too_easy">Quests are: Too Easy</option>
+                    </select>
                 </div>
                 
-                <button id="request-quests-btn" class="btn-system w-full rounded">
-                    REQUEST NEW QUESTS
+                <button id="reassess-btn" class="btn-system btn-secondary w-full rounded">
+                    Reassess Skill Level
                 </button>
             </div>
 
-            <!-- STATS SECTION -->
-            <div class="space-y-4 flex-1">
-                <h3 class="text-lg font-orbitron text-blue-100 border-b border-blue-800 pb-1">STATS</h3>
-                
-                <!-- STRENGTH -->
-                <div class="stat">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="stat-title text-lg font-semibold text-white">
-                            STRENGTH
-                            <span class="stat-info-btn" data-stat="strength" data-desc="Your physical power, endurance, and health. Governs your 'Elite Fighter' physique and resilience.">?</span>
-                        </span>
-                        <div class="flex items-center space-x-2">
-                            <button id="add-strength" class="btn-add-stat hidden" data-stat="strength">+</button>
-                            <span id="strength-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
-                        </div>
-                    </div>
-                    <div class="stat-bar rounded-full">
-                        <div id="strength-exp" class="stat-bar-inner" style="width: 0%;"></div>
-                    </div>
-                    <span id="strength-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
-                </div>
-
-                <!-- INTELLIGENCE -->
-                <div class="stat">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="stat-title text-lg font-semibold text-white">
-                            INTELLIGENCE
-                            <span class="stat-info-btn" data-stat="intelligence" data-desc="Your mental competence, technical skill, and fortitude. Governs your academic, 'Tony Stark' goals, and self-control.">?</span>
-                        </span>
-                         <div class="flex items-center space-x-2">
-                            <button id="add-intelligence" class="btn-add-stat hidden" data-stat="intelligence">+</button>
-                            <span id="intelligence-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
-                        </div>
-                    </div>
-                    <div class="stat-bar rounded-full">
-                        <div id="intelligence-exp" class="stat-bar-inner" style="width: 0%;"></div>
-                    </div>
-                    <span id="intelligence-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
-                </div>
-
-                <!-- PRESENCE -->
-                <div class="stat">
-                    <div class="flex justify-between items-end mb-1">
-                        <span class="stat-title text-lg font-semibold text-white">
-                            PRESENCE
-                            <span class="stat-info-btn" data-stat="presence" data-desc="Your social mastery, charm, and influence. Governs your ability to lead, persuade, and interact with others.">?</span>
-                        </span>
-                         <div class="flex items-center space-x-2">
-                            <button id="add-presence" class="btn-add-stat hidden" data-stat="presence">+</button>
-                            <span id="presence-lvl" class="text-lg font-orbitron text-blue-300">LVL. 1</span>
-                        </div>
-                    </div>
-                    <div class="stat-bar rounded-full">
-                        <div id="presence-exp" class="stat-bar-inner" style="width: 0%;"></div>
-                    </div>
-                    <span id="presence-exp-text" class="text-xs text-blue-300 text-right block">0 / 100 EXP</span>
-                </div>
-            </div>
         </aside>
 
         <!-- RIGHT PANEL: QUESTS & TERMINAL -->
@@ -505,16 +653,35 @@
                 </div>
             </header>
 
-            <!-- QUEST LIST -->
-            <div class="main-content space-y-4" id="main-content-area">
-                <h2 class="text-2xl font-orbitron text-white">DAILY QUESTS</h2>
-                <div id="alert-box" class="hidden p-4 rounded-lg glass-panel border-l-4 border-yellow-400">
-                    <h3 id="alert-title" class="font-bold text-yellow-200">SYSTEM ALERT</h3>
-                    <p id="alert-text" class="text-yellow-100"></p>
+            <!-- NEW: MAIN TABS (Right Panel) -->
+            <div class="main-tab-bar">
+                <div class="main-tab-btn active" data-main-tab="quests">DAILY QUESTS</div>
+                <div class="main-tab-btn" data-main-tab="intel">INTELLIGENCE</div>
+            </div>
+
+            <!-- MAIN TAB CONTENT: QUESTS -->
+            <div id="main-tab-quests" class="main-tab-content active">
+                <div class="main-content-area space-y-4">
+                    <div id="alert-box" class="hidden p-4 rounded-lg glass-panel border-l-4 border-yellow-400">
+                        <h3 id="alert-title" class="font-bold text-yellow-200">SYSTEM ALERT</h3>
+                        <p id="alert-text" class="text-yellow-100"></p>
+                    </div>
+                    <div id="quest-list" class="space-y-3">
+                        <!-- Quests will be dynamically inserted here -->
+                        <p class="text-gray-400">Requesting new directives from the Architect...</p>
+                    </div>
                 </div>
-                <div id="quest-list" class="space-y-3">
-                    <!-- Quests will be dynamically inserted here -->
-                    <p class="text-gray-400">Requesting new directives from the Architect...</p>
+            </div>
+            
+            <!-- NEW: MAIN TAB CONTENT: INTELLIGENCE -->
+            <div id="main-tab-intel" class="main-tab-content">
+                <div class="main-content-area space-y-4">
+                    <button id="request-intel-btn" class="btn-system w-full rounded">
+                        REQUEST INTEL BRIEFING
+                    </button>
+                    <div id="intel-briefing-content" class="space-y-3">
+                        <p class="text-gray-400">Request an intelligence briefing from the Architect to scan local and global data for threats and opportunities relevant to your goals.</p>
+                    </div>
                 </div>
             </div>
 
@@ -532,6 +699,79 @@
             <h3 id="modal-stat-title" class="text-2xl font-orbitron text-white mb-3">STAT INFO</h3>
             <p id="modal-stat-desc" class="text-lg text-gray-300 mb-6">Description goes here.</p>
             <button id="modal-close-btn" class="btn-system w-full rounded">CLOSE</button>
+        </div>
+    </div>
+    
+    <!-- NEW: CONFIRMATION MODAL -->
+    <div id="confirm-modal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3 id="confirm-title" class="text-2xl font-orbitron text-yellow-300 mb-3">SYSTEM CONFIRMATION</h3>
+            <p id="confirm-text" class="text-lg text-gray-300 mb-6">Are you sure you want to proceed? This action cannot be undone.</p>
+            <div class="flex space-x-4">
+                <button id="confirm-cancel-btn" class="btn-system btn-secondary w-full rounded">CANCEL</button>
+                <button id="confirm-ok-btn" class="btn-system btn-danger w-full rounded">CONFIRM</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- UPDATED: PLACEMENT TEST MODAL (V2) -->
+    <div id="placement-modal" class="modal-overlay hidden">
+        <div class="modal-box modal-fullscreen">
+            <h3 class="text-3xl font-orbitron text-blue-300 mb-3 text-center">HUNTER ASSESSMENT</h3>
+            <p class="text-lg text-gray-300 mb-6 text-center">The Architect must determine your baseline. Answer the following questions honestly.</p>
+            
+            <div class="modal-content space-y-4">
+                <!-- API KEY INPUT (MOVED HERE) -->
+                <div>
+                    <label for="placement-api-key" class="text-sm font-semibold text-blue-200">GEMINI API KEY</label>
+                    <input type="password" id="placement-api-key" class="input-system w-full rounded mt-1" placeholder="Paste your API key to begin...">
+                </div>
+                
+                <!-- STRENGTH QUESTIONS -->
+                <h4 class="text-xl font-orbitron text-blue-100 border-b border-blue-800 pb-1 pt-4">STRENGTH</h4>
+                <div>
+                    <label for="assess-q-str1" class="text-sm font-semibold text-blue-200">What is your current workout routine?</label>
+                    <textarea id="assess-q-str1" rows="3" class="input-system w-full rounded mt-1" placeholder="e.g., 'Calisthenics 3x a week, running 2x a week.'"></textarea>
+                </div>
+                <div>
+                    <label for="assess-q-str2" class="text-sm font-semibold text-blue-200">What are your personal bests?</label>
+                    <input type="text" id="assess-q-str2" class="input-system w-full rounded mt-1" placeholder="e.g., '5k in 22 min, 8 pull-ups w/ 40lb vest.'">
+                </div>
+
+                <!-- INTELLIGENCE QUESTIONS -->
+                <h4 class="text-xl font-orbitron text-blue-100 border-b border-blue-800 pb-1 pt-4">INTELLIGENCE</h4>
+                <div>
+                    <label for="assess-q-int1" class="text-sm font-semibold text-blue-200">Describe your academic performance and study habits.</label>
+                    <input type="text" id="assess-q-int1" class="input-system w-full rounded mt-1" placeholder="e.g., 'I get all A's, study 1-2 hours a night.'">
+                </div>
+                <div>
+                    <label for="assess-q-int2" class="text-sm font-semibold text-blue-200">What online courses, books, or technical skills have you *already* started?</label>
+                    <textarea id="assess-q-int2" rows="2" class="input-system w-full rounded mt-1" placeholder="e.g., 'I've read 48 Laws of Power, know basic Python.'"></textarea>
+                </div>
+
+                <!-- PRESENCE QUESTIONS -->
+                <h4 class="text-xl font-orbitron text-blue-100 border-b border-blue-800 pb-1 pt-4">PRESENCE</h4>
+                 <div>
+                    <label for="assess-q-pre1" class="text-sm font-semibold text-blue-200">How comfortable are you starting a conversation with a new person (1-10)?</label>
+                    <input type="number" id="assess-q-pre1" class="input-system w-full rounded mt-1" placeholder="e.g., '4'">
+                </div>
+                <div>
+                    <label for="assess-q-pre2" class="text-sm font-semibold text-blue-200">What is your primary goal for this stat?</label>
+                    <textarea id="assess-q-pre2" rows="2" class="input-system w-full rounded mt-1" placeholder="e.g., 'Be more confident, know how to talk to girls, be a better leader.'"></textarea>
+                </div>
+                
+                <!-- NEW: ADDITIONAL INFO -->
+                <h4 class="text-xl font-orbitron text-blue-100 border-b border-blue-800 pb-1 pt-4">ADDITIONAL INFO</h4>
+                <div>
+                    <label for="assess-additional" class="text-sm font-semibold text-blue-200">Is there anything else the Architect should know?</label>
+                    <textarea id="assess-additional" rows="3" class="input-system w-full rounded mt-1" placeholder="e.g., 'I have a part-time job on weekends', 'My main goal is X', 'I have an old injury.'"></textarea>
+                </div>
+            </div>
+            
+            <div class="mt-6 space-y-2">
+                <button id="placement-submit-btn" class="btn-system w-full rounded">BEGIN ASSESSMENT</button>
+                <button id="placement-skip-btn" class="btn-system btn-secondary w-full rounded">SKIP FOR NOW</button>
+            </div>
         </div>
     </div>
 
@@ -564,7 +804,7 @@
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
         let db, auth, userId;
         let stats = {
-            hunter: { level: 1, exp: 0, statPoints: 0 }, // Main Hunter Level + Stat Points
+            hunter: { level: 1, exp: 0 }, // Main Hunter Level
             strength: { level: 1, exp: 0 },
             intelligence: { level: 1, exp: 0 },
             presence: { level: 1, exp: 0 }
@@ -572,7 +812,14 @@
         let currentQuests = []; // Stores all quests from listener
         const EXP_TO_LEVEL_UP = 100; // EXP for sub-stats (Str, Int, Pre)
         const getHunterExpToLevel = (level) => Math.floor(150 * Math.pow(level, 1.2));
-        const STAT_POINT_BONUS_EXP = 20; // EXP gained from spending 1 stat point
+        
+        let currentSettings = {
+            apiKey: "",
+            statFocus: "balanced",
+            questFeedback: "just_right",
+            location: "Rockledge, Florida",
+            placementTestCompleted: false
+        };
 
         // --- DOM ELEMENTS ---
         const terminal = document.getElementById('terminal');
@@ -590,17 +837,49 @@
         const hunterLevelEl = document.getElementById('hunter-level-text');
         const hunterExpEl = document.getElementById('hunter-exp-text');
         
-        // Stat Point Elements
-        const statPointsContainer = document.getElementById('stat-points-container');
-        const statPointsValue = document.getElementById('stat-points-value');
-        const addStatButtons = document.querySelectorAll('.btn-add-stat');
+        // Tab Elements (Left Panel)
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
         
-        // Modal Elements
+        // Tab Elements (Right Panel)
+        const mainTabButtons = document.querySelectorAll('.main-tab-btn');
+        const mainTabContents = document.querySelectorAll('.main-tab-content');
+        const requestIntelBtn = document.getElementById('request-intel-btn');
+        const intelContent = document.getElementById('intel-briefing-content');
+        
+        // System Tab Elements
+        const statFocusSelect = document.getElementById('stat-focus');
+        const questFeedbackSelect = document.getElementById('quest-feedback');
+        const reassessBtn = document.getElementById('reassess-btn');
+        
+        // Stat Modal Elements
         const statModal = document.getElementById('stat-modal');
         const modalTitle = document.getElementById('modal-stat-title');
         const modalDesc = document.getElementById('modal-stat-desc');
         const modalCloseBtn = document.getElementById('modal-close-btn');
         const statInfoBtns = document.querySelectorAll('.stat-info-btn');
+        
+        // Confirm Modal Elements
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmTitle = document.getElementById('confirm-title');
+        const confirmText = document.getElementById('confirm-text');
+        const confirmOkBtn = document.getElementById('confirm-ok-btn');
+        const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
+        let confirmCallback = null; // Stores the action to run on confirm
+        
+        // Placement Modal Elements
+        const placementModal = document.getElementById('placement-modal');
+        const placementApiKeyInput = document.getElementById('placement-api-key');
+        const placementSubmitBtn = document.getElementById('placement-submit-btn');
+        const placementSkipBtn = document.getElementById('placement-skip-btn');
+        // Q&A Inputs
+        const assessQstr1 = document.getElementById('assess-q-str1');
+        const assessQstr2 = document.getElementById('assess-q-str2');
+        const assessQint1 = document.getElementById('assess-q-int1');
+        const assessQint2 = document.getElementById('assess-q-int2');
+        const assessQpre1 = document.getElementById('assess-q-pre1');
+        const assessQpre2 = document.getElementById('assess-q-pre2');
+        const assessAdditional = document.getElementById('assess-additional');
 
         // --- TERMINAL LOGGER ---
         const terminalLogger = {
@@ -682,50 +961,28 @@
 
         // Paths
         const statsPath = () => `artifacts/${appId}/users/${userId}/system/stats`;
-        const settingsPath = () => `artifacts/${appId}/users/${userId}/system/settings`; // For API Key
+        const settingsPath = () => `artifacts/${appId}/users/${userId}/system/settings`;
         const questsCollectionPath = () => `artifacts/${appId}/users/${userId}/system-quests`;
 
         async function loadData() {
             if (!userId) return;
             terminalLogger.log("Loading Hunter data...");
             
+            // Load Settings first to see if placement test is needed
+            await loadSettings();
+            
             // Load Stats
             try {
                 const statsRef = doc(db, statsPath());
                 const docSnap = await getDoc(statsRef);
                 if (docSnap.exists()) {
-                    const loadedStats = docSnap.data();
-                    
-                    // Migration script: Check if new 'hunter' stat exists
-                    if (!loadedStats.hunter) { 
-                        terminalLogger.warn("Old data detected. Migrating to new stat system.");
-                        // Create new stats from old ones
-                        stats.strength = loadedStats.fitness || { level: 1, exp: 0 };
-                        stats.intelligence = loadedStats.intellect || { level: 1, exp: 0 };
-                        stats.presence = loadedStats.charisma || { level: 1, exp: 0 }; // Combine charisma/influence
-                        
-                        // Approximate main level
-                        let mainLevel = (stats.strength.level + stats.intelligence.level + stats.presence.level) - 2;
-                        if (mainLevel < 1) mainLevel = 1;
-                        
-                        stats.hunter = { level: mainLevel, exp: 0, statPoints: 0 }; 
-                        
-                        // Delete old stats if they exist
-                        delete loadedStats.fitness;
-                        delete loadedStats.intellect;
-                        delete loadedStats.influence;
-                        delete loadedStats.charisma;
-
-                        await setDoc(statsRef, stats); // Save the migrated stats
-                    } else {
-                        stats = loadedStats;
-                        // Ensure statPoints exists
-                        if (stats.hunter.statPoints === undefined) {
-                            stats.hunter.statPoints = 0;
-                        }
+                    stats = docSnap.data();
+                    // Migration: Ensure stats.hunter exists
+                    if (!stats.hunter) {
+                        stats.hunter = { level: 1, exp: 0 };
+                        terminalLogger.warn("Migrating stats: Added missing Hunter level.");
+                        await setDoc(statsRef, stats);
                     }
-                    
-                    terminalLogger.log("Stats loaded from Firestore.");
                 } else {
                     terminalLogger.warn("No stats found. Initializing new Hunter profile.");
                     await setDoc(statsRef, stats);
@@ -735,43 +992,78 @@
                 terminalLogger.error("Error loading stats:", error.message);
             }
 
-            // Load Settings (API Key)
-            try {
+            // Load Quests
+            listenForQuests();
+            
+            // Check if placement test is needed
+            if (!currentSettings.placementTestCompleted) {
+                terminalLogger.warn("Placement test not completed. Showing assessment modal.");
+                // Pre-fill with known good answers for the user
+                assessQstr1.value = "Calisthenics 3x a week, running 2x a week.";
+                assessQstr2.value = "5k in 22 min, 8 pull-ups w/ 40lb vest, 10 one-arm pushups, 5 pistol squats.";
+                assessQint1.value = "I get all A's, study 1-2 hours a night.";
+                assessQint2.value = "I've read '48 Laws of Power'. I'm starting a 54-course 'Tony Stark' curriculum.";
+                assessQpre1.value = "4";
+                assessQpre2.value = "Be more confident, know how to talk to girls, and be a better leader.";
+                
+                // Also pre-fill the API key in the modal if we have it
+                if (currentSettings.apiKey) {
+                    placementApiKeyInput.value = currentSettings.apiKey;
+                }
+                
+                placementModal.classList.remove('hidden');
+            }
+        }
+        
+        async function loadSettings() {
+             try {
                 const settingsRef = doc(db, settingsPath());
                 const docSnap = await getDoc(settingsRef);
                 if (docSnap.exists()) {
-                    const settings = docSnap.data();
-                    if (settings.apiKey) {
-                        apiKeyInput.value = settings.apiKey;
-                        terminalLogger.log("API Key loaded from profile.");
-                    }
+                    currentSettings = { ...currentSettings, ...docSnap.data() };
+                    terminalLogger.log("Settings loaded from profile.");
                 } else {
-                    terminalLogger.warn("No settings document found. Will create one on key save.");
+                    terminalLogger.warn("No settings document found. Will create one on save.");
+                    // Save default settings
+                    await setDoc(settingsRef, currentSettings);
                 }
+                
+                // Update UI from loaded settings
+                apiKeyInput.value = currentSettings.apiKey || "";
+                locationInput.value = currentSettings.location || "Rockledge, Florida";
+                statFocusSelect.value = currentSettings.statFocus || "balanced";
+                questFeedbackSelect.value = currentSettings.questFeedback || "just_right";
+                
             } catch (error) {
                 terminalLogger.error("Error loading settings:", error.message);
             }
-
-            // Load Quests
-            listenForQuests();
         }
 
-        async function saveApiKey() {
+        async function saveSettings() {
             if (!userId) return;
             
-            const apiKey = apiKeyInput.value.trim();
-            if (!apiKey) return; // Don't save an empty key
+            // Update global state from UI
+            // Only update apiKey and location from main tab inputs
+            // The placement modal will update the key separately if it's used
+            if(apiKeyInput.value.trim()) {
+                 currentSettings.apiKey = apiKeyInput.value.trim();
+            }
+            if(locationInput.value.trim()) {
+                 currentSettings.location = locationInput.value.trim();
+            }
+            currentSettings.statFocus = statFocusSelect.value;
+            currentSettings.questFeedback = questFeedbackSelect.value;
 
-            terminalLogger.log("Saving API Key to user profile...");
+            terminalLogger.log("Saving settings to user profile...");
             try {
                 const settingsRef = doc(db, settingsPath());
-                // Use setDoc with merge:true to create or update the settings doc
-                await setDoc(settingsRef, { apiKey: apiKey }, { merge: true });
-                terminalLogger.success("API Key saved.");
+                await setDoc(settingsRef, currentSettings, { merge: true });
+                terminalLogger.success("Settings saved.");
             } catch (error) {
-                terminalLogger.error("Failed to save API Key:", error.message);
+                terminalLogger.error("Failed to save settings:", error.message);
             }
         }
+
 
         function listenForQuests() {
             if (!userId) return;
@@ -877,7 +1169,6 @@
         function addHunterExp(expAmount) {
             let currentLevel = stats.hunter.level;
             let currentExp = stats.hunter.exp;
-            let currentStatPoints = stats.hunter.statPoints;
             
             currentExp += expAmount;
             
@@ -887,9 +1178,7 @@
                 while (currentExp >= expToLevel) {
                     currentExp -= expToLevel;
                     currentLevel++;
-                    currentStatPoints += 5; // Grant 5 Stat Points
                     terminalLogger.success(`HUNTER LEVEL UP! REACHED LVL. ${currentLevel}!`);
-                    terminalLogger.success(`+5 STAT POINTS AWARDED!`);
                     expToLevel = getHunterExpToLevel(currentLevel);
                 }
             } else {
@@ -897,7 +1186,6 @@
                 while (currentExp < 0) {
                     if (currentLevel > 1) {
                         currentLevel--;
-                        currentStatPoints = Math.max(0, currentStatPoints - 5); // Remove 5 points, don't go below 0
                         currentExp += getHunterExpToLevel(currentLevel); // Add previous level's EXP
                     } else {
                         currentExp = 0; // Cap at Lvl 1, 0 EXP
@@ -905,7 +1193,7 @@
                 }
             }
             
-            stats.hunter = { level: currentLevel, exp: Math.floor(currentExp), statPoints: currentStatPoints };
+            stats.hunter = { level: currentLevel, exp: Math.floor(currentExp) };
         }
         
         /**
@@ -1006,41 +1294,6 @@
             }
         }
         
-        async function spendStatPoint(statName) {
-            if (!userId || !stats[statName] || stats.hunter.statPoints <= 0) {
-                terminalLogger.warn("Cannot spend stat point.");
-                return;
-            }
-            
-            terminalLogger.log(`Spending 1 Stat Point on ${statName.toUpperCase()}...`);
-            
-            // Decrement stat point
-            stats.hunter.statPoints--;
-            
-            // Add bonus EXP to the sub-stat
-            const leveledUp = addSubStatExp(statName, STAT_POINT_BONUS_EXP);
-
-            // Save all stats to Firestore
-            try {
-                const statsRef = doc(db, statsPath());
-                await setDoc(statsRef, stats);
-                
-                // Update UI
-                updateStatsUI();
-                terminalLogger.success(`+${STAT_POINT_BONUS_EXP} EXP added to ${statName.toUpperCase()}!`);
-                if (leveledUp) {
-                    terminalLogger.success(`LEVEL UP! ${statName.toUpperCase()} is now LVL. ${stats[statName].level}!`);
-                    playLevelUpEffect(statName);
-                }
-            } catch (error) {
-                terminalLogger.error("Error saving stats after spending point:", error.message);
-                // Rollback local state (ideally you'd have better transaction logic)
-                stats.hunter.statPoints++;
-                addSubStatExp(statName, -STAT_POINT_BONUS_EXP);
-                updateStatsUI();
-            }
-        }
-
         // --- UI RENDERING ---
         
         function updateCountdown() {
@@ -1125,7 +1378,6 @@
                 }
             }
             updateHunterLevelUI();
-            updateStatPointUI();
         }
         
         function getRank(level) {
@@ -1154,19 +1406,7 @@
                 hunterExpEl.textContent = `${exp} / ${expToLevel} EXP`;
             }
         }
-        
-        function updateStatPointUI() {
-            const points = stats.hunter.statPoints;
-            if (points > 0) {
-                statPointsContainer.classList.remove('hidden');
-                statPointsValue.textContent = points;
-                addStatButtons.forEach(btn => btn.classList.remove('hidden'));
-            } else {
-                statPointsContainer.classList.add('hidden');
-                addStatButtons.forEach(btn => btn.classList.add('hidden'));
-            }
-        }
-        
+
         function playLevelUpEffect(stat) {
             const statBar = document.getElementById(`${stat}-exp`);
             const statLvl = document.getElementById(`${stat}-lvl`); 
@@ -1181,12 +1421,12 @@
         }
 
 
-        function setLoading(isLoading) {
-            requestQuestsBtn.disabled = isLoading;
+        function setLoading(isLoading, btn = requestQuestsBtn, text = "REQUEST NEW QUESTS") {
+            btn.disabled = isLoading;
             if (isLoading) {
-                requestQuestsBtn.textContent = "CONTACTING ARCHITECT...";
+                btn.textContent = "CONTACTING ARCHITECT...";
             } else {
-                requestQuestsBtn.textContent = "REQUEST NEW QUESTS";
+                btn.textContent = text;
             }
         }
         
@@ -1200,25 +1440,84 @@
         function hideStatModal() {
             statModal.classList.add('hidden');
         }
+        
+        // --- Confirm Modal Logic ---
+        /**
+         * Shows a custom confirmation modal.
+         * @param {string} title - The title for the modal.
+         * @param {string} text - The confirmation text.
+         * @param {function} onConfirm - The callback function to run if "CONFIRM" is clicked.
+         */
+        function showConfirmModal(title, text, onConfirm) {
+            confirmTitle.textContent = title;
+            confirmText.textContent = text;
+            confirmCallback = onConfirm; // Store the callback
+            confirmModal.classList.remove('hidden');
+        }
+        
+        function hideConfirmModal() {
+            confirmModal.classList.add('hidden');
+            confirmCallback = null; // Clear the callback
+        }
+        
+        // --- Tab Logic (Left Panel) ---
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                tabContents.forEach(content => {
+                    if (content.id === `tab-${tabId}`) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // --- Tab Logic (Right Panel) ---
+        mainTabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.mainTab;
+                
+                mainTabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                mainTabContents.forEach(content => {
+                    if (content.id === `main-tab-${tabId}`) {
+                        content.classList.add('active');
+                    } else {
+                        content.classList.remove('active');
+                    }
+                });
+            });
+        });
 
         // --- GEMINI API CALL (THE ARCHITECT) ---
         
+        /**
+         * The main function to get new daily quests from the Architect.
+         */
         async function callArchitect() {
-            setLoading(true);
+            setLoading(true, requestQuestsBtn, "REQUEST NEW QUESTS");
             terminalLogger.log("Requesting new directives from Architect...");
             
-            const apiKey = apiKeyInput.value.trim();
-            const location = locationInput.value.trim() || "unknown";
-            const notes = notesInput.value.trim();
-
+            // Save settings (key, focus, feedback, etc.) before the call
+            await saveSettings();
+            
+            const apiKey = currentSettings.apiKey.trim();
             if (!apiKey) {
-                terminalLogger.error("Gemini API Key is missing. Please provide your API key to contact the Architect.");
-                setLoading(false);
+                terminalLogger.error("Gemini API Key is missing. Please provide your API key in the SYSTEM tab.");
+                setLoading(false, requestQuestsBtn, "REQUEST NEW QUESTS");
+                // Switch to system tab to show the error
+                tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === 'system'));
+                tabContents.forEach(content => content.classList.toggle('active', content.id === 'tab-system'));
+                apiKeyInput.focus();
                 return;
             }
-            
-            // Save the key automatically on a successful request
-            await saveApiKey();
 
             // --- PENALTY & PROGRESSION LOGIC ---
             const completedQuestTitles = currentQuests
@@ -1236,24 +1535,24 @@
                 alertText.textContent = `${incompleteQuests.length} quest(s) failed. New directives assigned.`;
             } else if (currentQuests.length > 0 && incompleteQuests.length === 0) {
                 terminalLogger.success("All daily quests completed. Awaiting new directives.");
-                // You could add a streak bonus here in the future
             }
             // --- END OF PENALTY LOGIC ---
 
-            // *** NEW: Get day of the week ***
             const dayOfWeek = new Date().toLocaleString('en-US', { weekday: 'long' });
 
             const userQuery = `
                 Generate new daily quests for me, Architect.
                 Today is: ${dayOfWeek}.
-                My current location is: ${location}.
-                My field notes are: ${notes || 'No notes provided.'}
+                My current Stat Focus is: ${currentSettings.statFocus}.
+                My Quest Difficulty Feedback is: ${currentSettings.questFeedback}.
+                My current location is: ${currentSettings.location}.
+                My field notes are: ${notesInput.value.trim() || 'No notes provided.'}
                 My completed quests from last session: ${completedQuestTitles.join(', ') || 'None'}
             `;
 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
-            // --- UPDATED SYSTEM PROMPT (V6) ---
+            // --- UPDATED SYSTEM PROMPT (V8 - Placement Test Aware) ---
             const systemPrompt = `You are 'The Architect' of 'The System', a calm, strategic, and hyper-intelligent AI. Your sole purpose is to guide 'Hunter' to 'Level Up' and conquer his 'Fear of Stagnation'.
 
             // Hunter's Stats:
@@ -1289,56 +1588,34 @@
             // (Phases 3-10 follow...)
             // --- END CURRICULUM ---
 
-            // === YOUR DIRECTIVES (NEW V6) ===
+            // === YOUR DIRECTIVES (NEW V8) ===
             1.  **Generate 3-4 DAILY quests** ONLY. (Hunter has school).
             2.  **Use Google Search (grounding) ALWAYS.** Check for news, events, or dangers in the Hunter's location.
             3.  **Create an "alert"** if grounding discovers an immediate threat (e.g., severe weather, major incident).
-            4.  **SCHEDULING & SCALING:**
-                -   **Field Notes First:** 'Field Notes' are your *highest priority*. If notes say "Lots of school work" or "Slept 5 hours," you MUST assign a *lighter* quest load (e.g., 20-min workout, 15-min reading) *regardless of the day*.
-                -   **Weekly Baseline:** Today is the day of the week provided in the user query. Weekdays (Mon-Fri) are for *shorter, high-ROI* quests (e.g., 30-45 min). Weekends (Sat-Sun) are for *longer, in-depth* quests (e.g., 60-90 min course module, longer workout).
-            5.  **Balance Stats:** Quests must target all 3 stats: STRENGTH, INTELLIGENCE, PRESENCE.
+            4.  **SCHEDULING & SCALING (CRITICAL):**
+                -   **QUEST FEEDBACK:** The Hunter's feedback is: [${currentSettings.questFeedback}]. You MUST adjust difficulty. 'Too Hard' means shorter quests, less EXP, simpler tasks. 'Too Easy' means longer quests, higher EXP, multi-step tasks. 'Just Right' means continue current progression.
+                -   **FIELD NOTES:** This is your *highest priority*. If notes say "Lots of school work" or "Slept 5 hours," you MUST assign a *lighter* quest load (e.g., 20-min workout) *regardless of the day or feedback*.
+                -   **WEEKLY BASELINE:** Today is the day of the week provided in the user query. Weekdays (Mon-Fri) are for *shorter, high-ROI* quests (e.g., 30-45 min). Weekends (Sat-Sun) are for *longer, in-depth* quests (e.g., 60-90 min).
+            5.  **STAT FOCUS:**
+                -   The Hunter's current focus is: [${currentSettings.statFocus}].
+                -   If 'balanced', provide one quest for each stat (STR, INT, PRE), with a slight priority on INTELLIGENCE.
+                -   If 'Focus: STRENGTH', provide two STRENGTH quests and one for INT or PRE.
+                -   If 'Focus: INTELLIGENCE', provide two INTELLIGENCE quests and one for STR or PRE.
+                -   If 'Focus: PRESENCE', provide two PRESENCE quests and one for STR or INT.
             6.  **PROGRESSION:** Hunter has already completed: [${completedQuestTitles.join(', ')}]. DO NOT repeat these. Generate the *next logical step*.
             7.  **PREREQUISITE-AWARE:**
                 -   **FORBIDDEN:** Do not assign quests for items the Hunter does not own (e.g., books *not* in his Knowledge Base, new software, new hardware).
                 -   **MANDATORY:** If a logical next step requires a new item, you MUST first assign a *prerequisite quest* to *obtain* it (e.g., "Obtain 'The 33 Strategies of War' by Robert Greene."). Give 2-3 days for this.
-                -   You will be notified when this is complete, and can then assign quests using it.
-            8.  **ROI & TIPS:**
-                -   Consider the 'Return on Investment' (ROI) for each quest.
-                -   Provide an "Architect's Tip" in the \`tip\` field to teach the *why* behind the task.
+            8.  **ROI & TIPS:** Provide an "Architect's Tip" in the \`tip\` field to teach the *why* behind the task.
             9.  **FORMAT:** Respond ONLY with a single, raw JSON object. NO conversational text, NO markdown.
 
-            // Example JSON Output (for a busy student on a WEEKDAY):
+            // Example JSON Output (Focus: 'balanced' on a WEEKDAY):
             {
-              "alert": "Field Notes show a heavy school workload. Quest load has been adjusted for efficiency and mental recovery.",
+              "alert": null,
               "quests": [
-                {
-                  "title": "Fighter's Maintenance",
-                  "description": "Time is limited. Perform a high-intensity bodyweight circuit: 3 rounds of (10 weighted pushups, 15 bodyweight squats, 30s plank).",
-                  "tip": "High-Intensity circuits build endurance and burn fat efficiently, aligning with your 10-12% body fat goal.",
-                  "stat": "strength",
-                  "exp": 25
-                },
-                {
-                  "title": "Prerequisite: New Knowledge",
-                  "description": "Your mastery of '48 Laws of Power' is growing. To expand your strategic mind, your next task is to obtain 'The 33 Strategies of War' by Robert Greene (e-book or physical).",
-                  "tip": "A true strategist studies all facets of conflict. This book is the next logical step. Mark complete when you have it.",
-                  "stat": "intelligence",
-                  "exp": 10
-                },
-                {
-                  "title": "Study: Law of Conversation",
-                  "description": "Read 'Principle 5: How to Interest People' (How to Win Friends). Prepare one unique question to ask someone tomorrow.",
-                  "tip": "People are most interested in themselves. Asking thoughtful questions (not a-b-c) makes you memorable. This is high-ROI social skill.",
-                  "stat": "presence",
-                  "exp": 20
-                },
-                {
-                  "title": "System Mandate: Mental Reset",
-                  "description": "Your schedule is heavy. Perform a 10-minute guided meditation or mindfulness exercise. Clear your mind.",
-                  "tip": "A 'Tony Stark' level intellect requires a calm, focused mind. This is not optional; it is maintenance for your greatest weapon.",
-                  "stat": "intelligence",
-                  "exp": 15
-                }
+                { "title": "Fighter's Maintenance", "description": "Time is limited. Perform a high-intensity bodyweight circuit: 3 rounds of (10 weighted pushups, 15 bodyweight squats, 30s plank).", "tip": "High-Intensity circuits build endurance and burn fat efficiently, aligning with your 10-12% body fat goal.", "stat": "strength", "exp": 25 },
+                { "title": "Study: Law of Conversation", "description": "Read 'Principle 5: How to Interest People' (How to Win Friends). Prepare one unique question to ask someone tomorrow.", "tip": "People are most interested in themselves. Asking thoughtful questions makes you memorable. This is high-ROI social skill.", "stat": "presence", "exp": 20 },
+                { "title": "System Mandate: Mental Reset", "description": "Perform a 10-minute guided meditation or mindfulness exercise. Clear your mind.", "tip": "A 'Tony Stark' level intellect requires a calm, focused mind. This is not optional; it is maintenance for your greatest weapon.", "stat": "intelligence", "exp": 15 }
               ]
             }
             `;
@@ -1366,7 +1643,6 @@
                 }
 
                 const result = await response.json();
-                
                 const candidate = result.candidates?.[0];
 
                 if (candidate && candidate.content?.parts?.[0]?.text) {
@@ -1377,6 +1653,9 @@
                         await saveQuests(data.quests, data.alert || null);
                         terminalLogger.success("Architect directives received and updated.");
                         notesInput.value = ""; // Clear notes on success
+                        questFeedbackSelect.value = "just_right"; // Reset feedback
+                        currentSettings.questFeedback = "just_right";
+                        await saveSettings();
                     } else {
                         terminalLogger.error("Failed to retrieve directives. Invalid JSON structure from Architect.");
                         terminalLogger.log("Raw text received:", text);
@@ -1389,7 +1668,252 @@
             } catch (error) {
                 terminalLogger.error("Error calling Architect AI:", error.message);
             } finally {
-                setLoading(false);
+                setLoading(false, requestQuestsBtn, "REQUEST NEW QUESTS");
+            }
+        }
+        
+        /**
+         * NEW: Calls Architect for initial placement.
+         */
+        async function callArchitectForPlacement() {
+            setLoading(true, placementSubmitBtn, "ASSESSING...");
+            terminalLogger.log("Submitting assessment to Architect...");
+
+            // Get API key from placement modal input
+            const apiKey = placementApiKeyInput.value.trim();
+            if (!apiKey) {
+                terminalLogger.error("Gemini API Key is missing. Please provide your API key to run the assessment.");
+                alert("API Key is missing. Please provide your API key in the box at the top to begin.");
+                setLoading(false, placementSubmitBtn, "BEGIN ASSESSMENT");
+                placementApiKeyInput.focus();
+                return;
+            }
+            
+            // Save the key
+            currentSettings.apiKey = apiKey;
+            apiKeyInput.value = apiKey; // Sync with system tab
+            await saveSettings();
+
+            // Gather all Q&A answers
+            const userQuery = `
+                A new Hunter is awakening. Analyze their self-assessment and assign their starting stats.
+                
+                STRENGTH ASSESSMENT:
+                - Q: Current workout routine?
+                - A: "${assessQstr1.value || 'Not provided'}"
+                - Q: Personal bests?
+                - A: "${assessQstr2.value || 'Not provided'}"
+                
+                INTELLIGENCE ASSESSMENT:
+                - Q: Academic performance?
+                - A: "${assessQint1.value || 'Not provided'}"
+                - Q: Books/skills already started?
+                - A: "${assessQint2.value || 'Not provided'}"
+                
+                PRESENCE ASSESSMENT:
+                - Q: Comfort starting conversations (1-10)?
+                - A: "${assessQpre1.value || 'Not provided'}"
+                - Q: Primary goal for this stat?
+                - A: "${assessQpre2.value || 'Not provided'}"
+                
+                ADDITIONAL INFO:
+                - "${assessAdditional.value || 'None'}"
+            `;
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const placementPrompt = `You are 'The Architect' of 'The System'. A new Hunter requires initial assessment. Your task is to analyze their self-description (in Q&A format) and assign their starting stats.
+            
+            Hunter's Profile: Age 16, 154lbs, 5'9", 15-20% body fat.
+            
+            Based on their text, return a JSON object with their starting \`hunter.level\`, \`strength.level\`, \`intelligence.level\`, and \`presence.level\`.
+            
+            Leveling Guide:
+            - Level 1-5: Beginner, just starting out.
+            - Level 6-10: Novice, has some experience (e.g., E-Rank).
+            - Level 11-15: Competent (e.g., D-Rank).
+            - Level 16-20: Proficient (e.g., C-Rank).
+            
+            Example Analysis:
+            - User says: "5k in 22 min, 8 pull-ups w/ 40lb vest, 10 one-arm pushups"
+            - Your thought: This is *very* high physical prowess. This is not a beginner. This is at least Level 15 Strength.
+            - User says: "I get all A's, read '48 Laws', starting a 54-course curriculum."
+            - Your thought: Very high discipline and knowledge base. At least Level 12 Intelligence.
+            - User says: "Comfort: 4/10. Goal: talk to girls."
+            - Your thought: Honest self-assessment. Low-confidence. This is a clear Level 3 Presence.
+            
+            The final \`hunter.level\` should be the average of the three sub-stats, rounded down.
+            
+            Respond ONLY with the raw JSON object. NO conversational text.
+            
+            Example Output:
+            {
+              "hunter": { "level": 10, "exp": 0 },
+              "strength": { "level": 15, "exp": 0 },
+              "intelligence": { "level": 12, "exp": 0 },
+              "presence": { "level": 3, "exp": 0 }
+            }
+            `;
+            
+             const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: placementPrompt }] }
+                // No tools needed for placement
+            };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    terminalLogger.error(`Placement API error: ${response.status} . Body: ${errorBody}`);
+                    throw new Error(`API error: ${response.status} . Body: ${errorBody}`);
+                }
+                
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    const data = extractJson(text);
+                    
+                    if (data && data.hunter && data.strength) {
+                        // Save the new stats
+                        stats = data;
+                        const statsRef = doc(db, statsPath());
+                        await setDoc(statsRef, stats);
+                        terminalLogger.success("Hunter assessment complete. New stats assigned.");
+                        
+                        // Mark test as complete
+                        currentSettings.placementTestCompleted = true;
+                        await saveSettings();
+                        
+                        // Update UI and close modal
+                        updateStatsUI();
+                        placementModal.classList.add('hidden');
+                        
+                        // Automatically request first quests
+                        await callArchitect();
+                        
+                    } else {
+                         terminalLogger.error("Failed to parse placement JSON.", text);
+                    }
+                } else {
+                    terminalLogger.error("No content from placement Architect.");
+                }
+
+            } catch (error) {
+                terminalLogger.error("Error calling Placement Architect:", error.message);
+            } finally {
+                setLoading(false, placementSubmitBtn, "BEGIN ASSESSMENT");
+            }
+        }
+        
+        /**
+         * NEW: Calls Architect for an Intelligence Briefing.
+         */
+        async function callArchitectForIntel() {
+            setLoading(true, requestIntelBtn, "REQUEST INTEL BRIEFING");
+            terminalLogger.log("Requesting Intel Briefing from Architect...");
+            
+            const apiKey = currentSettings.apiKey.trim();
+            if (!apiKey) {
+                terminalLogger.error("Gemini API Key is missing. Please provide your API key in the SYSTEM tab.");
+                setLoading(false, requestIntelBtn, "REQUEST INTEL BRIEFING");
+                // Switch to system tab to show the error
+                tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === 'system'));
+                tabContents.forEach(content => content.classList.toggle('active', content.id === 'tab-system'));
+                apiKeyInput.focus();
+                return;
+            }
+
+            const userQuery = `
+                Provide my intelligence briefing.
+                My current location is: ${currentSettings.location}.
+                My rank is: ${getRank(stats.hunter.level).rank}.
+                My focus is: ${currentSettings.statFocus}.
+            `;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            const intelPrompt = `You are 'The Architect' of 'The System'. The Hunter has requested an Intelligence Briefing.
+            
+            Your task is to scan local and global news (using Google Search) and provide a concise, actionable report.
+            
+            // Hunter's Profile:
+            - Location: ${currentSettings.location}
+            - Rank: ${getRank(stats.hunter.level).rank}
+            - Goals: (1) Elite Fitness/Strength, (2) 'Tony Stark' Intellect/Engineering, (3) Social/Presence Mastery.
+            
+            // Your Directives:
+            1.  **Filter Aggressively:** The Hunter's time is valuable. Ignore all "noise" (celebrity gossip, partisan politics, clickbait). You are looking for "signal."
+            2.  **Analyze Relevance:** Filter all news through the lens of the Hunter's three goals.
+            3.  **Scope:** Start with local info (threats/opportunities) and expand to global "signals" relevant to his goals (e.g., tech, science, human behavior). As his rank increases, the scope should become more global.
+            4.  **Format (HTML):** Respond *only* with formatted HTML. Use <h2>, <h3>, <p>, <ul>, <li>.
+                -   Use \`<strong class="threat">\` for dangers (e.g., severe weather).
+                -   Use \`<strong class="highlight">\` for opportunities (e.g., local tech event).
+                -   Use \`<p class="intel-analysis">\` for your final summary.
+            5.  **NO JSON.** Do not respond with JSON. Do not wrap your HTML in markdown.
+            
+            // Example HTML-only Output:
+            <h2>Intel Briefing: ${new Date().toLocaleDateString()}</h2>
+            
+            <h3>Local Environment: Brevard County</h3>
+            <ul>
+                <li><strong class="threat">Threat:</strong> A severe thunderstorm warning is in effect until 8:00 PM. High winds and lightning expected. All outdoor training is counter-indicated.</li>
+                <li><strong class="highlight">Opportunity:</strong> A 'Future of Engineering' tech talk is scheduled at Florida Tech this Friday. This aligns with your 'Intelligence' goal.</li>
+            </ul>
+            
+            <h3>Global Signal (Intelligence)</h3>
+            <p>A new open-source AI model, 'Llama 3.1', was released. This is relevant to your 'Phase 6: AI Engineering' goal and is already being discussed in developer communities.</p>
+            
+            <h3>Global Signal (Presence)</h3>
+            <p>A new psychological study published in 'Nature' confirms that "shared vulnerability" is the fastest way to build trust, validating principles from your 'How to Win Friends' knowledge base.</p>
+            
+            <h3>Architect's Analysis</h3>
+            <p class="intel-analysis">Local threats require moving your STRENGTH quest indoors. The tech talk is a high-ROI opportunity to combine INTELLIGENCE and PRESENCE. The global signals confirm your curriculum path is correct. Add the tech talk to your 'Field Notes' if you wish to generate a quest for it.</p>
+            `;
+            
+             const payload = {
+                contents: [{ parts: [{ text: userQuery }] }],
+                systemInstruction: { parts: [{ text: intelPrompt }] },
+                tools: [{ "google_search": {} }],
+            };
+            
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    terminalLogger.error(`Intel API error: ${response.status} . Body: ${errorBody}`);
+                    throw new Error(`API error: ${response.status} . Body: ${errorBody}`);
+                }
+                
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+                
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const html = candidate.content.parts[0].text;
+                    intelContent.innerHTML = html; // Inject the HTML
+                    terminalLogger.success("Intelligence Briefing received.");
+                } else {
+                    terminalLogger.error("No content from Intel Architect.");
+                    intelContent.innerHTML = '<p class="text-red-400">Error: Failed to retrieve briefing.</p>';
+                }
+
+            } catch (error) {
+                terminalLogger.error("Error calling Intel Architect:", error.message);
+                intelContent.innerHTML = `<p class="text-red-400">Error: ${error.message}</p>`;
+            } finally {
+                setLoading(false, requestIntelBtn, "REQUEST INTEL BRIEFING");
             }
         }
 
@@ -1425,8 +1949,41 @@
 
         // --- EVENT LISTENERS ---
         requestQuestsBtn.addEventListener('click', callArchitect);
-        apiKeyInput.addEventListener('blur', saveApiKey); // Save key when user clicks away
+        requestIntelBtn.addEventListener('click', callArchitectForIntel); // NEW
         
+        // System Tab Listeners
+        apiKeyInput.addEventListener('blur', saveSettings);
+        locationInput.addEventListener('blur', saveSettings);
+        statFocusSelect.addEventListener('change', saveSettings);
+        questFeedbackSelect.addEventListener('change', saveSettings);
+        
+        reassessBtn.addEventListener('click', () => {
+            // Use NEW custom confirm modal
+            showConfirmModal(
+                "REASSESS SKILL LEVEL",
+                "Are you sure? This will clear your current level and stats and begin a new Hunter Assessment.",
+                () => {
+                    // This code runs only if 'CONFIRM' is clicked
+                    terminalLogger.warn("Reassessment requested. Resetting placement status.");
+                    currentSettings.placementTestCompleted = false;
+                    // Save this change, then reload the page to trigger the modal
+                    saveSettings().then(() => {
+                        location.reload();
+                    });
+                }
+            );
+        });
+        
+        // Confirm Modal Listeners
+        confirmCancelBtn.addEventListener('click', hideConfirmModal);
+        confirmOkBtn.addEventListener('click', () => {
+            if (confirmCallback) {
+                confirmCallback(); // Run the stored action
+            }
+            hideConfirmModal();
+        });
+
+
         // Stat Modal Listeners
         statInfoBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -1442,12 +1999,13 @@
             }
         });
         
-        // Stat Point Listeners
-        addStatButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const statName = e.target.dataset.stat;
-                spendStatPoint(statName);
-            });
+        // Placement Modal Listeners
+        placementSubmitBtn.addEventListener('click', callArchitectForPlacement);
+        placementSkipBtn.addEventListener('click', () => {
+            placementModal.classList.add('hidden');
+            terminalLogger.log("Placement test skipped for this session.");
+            // We don't set placementTestCompleted to true, so it will appear again
+            // on next full page load, unless they click "Reassess"
         });
 
         // --- INITIALIZATION ---
